@@ -7,22 +7,35 @@
 <body>
 
 <h1>🎵 Smart Music App</h1>
-<p>Select your mood:</p>
+<p>Choose your vibe</p>
 
-<form method="POST">
-    <button name="mood" value="study">📚 Study</button>
-    <button name="mood" value="gym">💪 Gym</button>
-    <button name="mood" value="sad">😔 Sad</button>
-    <button name="mood" value="chill">😌 Chill</button>
-    <button name="mood" value="gaming">🎮 Gaming</button>
-</form>
+<div class="container">
+
+    <form method="POST">
+        <button class="card" name="mood" value="study">📚 Study</button>
+        <button class="card" name="mood" value="gym">💪 Gym</button>
+        <button class="card" name="mood" value="sad">😔 Sad</button>
+        <button class="card" name="mood" value="chill">😌 Chill</button>
+        <button class="card" name="mood" value="gaming">🎮 Gaming</button>
+    </form>
+
+</div>
 
 {% if video_id %}
-    <h2>Now Playing:</h2>
-    <iframe width="560" height="315"
-    src="https://www.youtube.com/embed/{{ video_id }}"
-    frameborder="0" allowfullscreen>
-    </iframe>
+    <div class="player">
+        <h2>Now Playing</h2>
+
+        <iframe
+        src="https://www.youtube.com/embed/{{ video_id }}"
+        allowfullscreen>
+        </iframe>
+
+        <form method="POST">
+            <input type="hidden" name="mood" value="{{ mood }}">
+            <input type="hidden" name="index" value="{{ index + 1 }}">
+            <button class="next-btn">⏭ Next</button>
+        </form>
+    </div>
 {% endif %}
 
 </body>

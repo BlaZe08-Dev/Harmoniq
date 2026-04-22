@@ -13,12 +13,18 @@ music_data = {
 @App.route("/", methods=["GET", "POST"])
 def Home():
     video_id = None
+    mood = None
+    index = 0
 
     if request.method == "POST":
         mood = request.form.get("mood")
-        video_id = music_data.get(mood)
+        index = int(request.form.get("index", 0))
 
-    return render_template("index.html", video_id=video_id)
+        if mood in music_data:
+            videos = music_data[mood]
+            video_id = videos[index % len(videos)]
+
+    return render_template("index.html", video_id=video_id, mood=mood, index=index)
 
 if __name__ == "__main__":
     App.run(debug=True)
