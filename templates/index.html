@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Music App 🎧</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>🎵 Smart Music App</h1>
+<p>Select your mood:</p>
+
+<form method="POST">
+    <button name="mood" value="study">📚 Study</button>
+    <button name="mood" value="gym">💪 Gym</button>
+    <button name="mood" value="sad">😔 Sad</button>
+    <button name="mood" value="chill">😌 Chill</button>
+    <button name="mood" value="gaming">🎮 Gaming</button>
+</form>
+
+{% if video_id %}
+    <h2>Now Playing:</h2>
+    <iframe width="560" height="315"
+    src="https://www.youtube.com/embed/{{ video_id }}"
+    frameborder="0" allowfullscreen>
+    </iframe>
+{% endif %}
+
+</body>
+</html>
