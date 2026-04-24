@@ -4,39 +4,224 @@
     <title>Smart Music App 🎧</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
 
 <h1>🎵 Smart Music App</h1>
-<p>Choose your vibe</p>
+<p>Search or choose your vibe</p>
 
-<div class="container">
-
-    <form method="POST">
-        <button class="card" name="mood" value="study">📚 Study</button>
-        <button class="card" name="mood" value="gym">💪 Gym</button>
-        <button class="card" name="mood" value="sad">😔 Sad</button>
-        <button class="card" name="mood" value="chill">😌 Chill</button>
-        <button class="card" name="mood" value="gaming">🎮 Gaming</button>
+<!-- 🔍 SEARCH -->
+<div class="search-container">
+    <form onsubmit="handleSearch(event)">
+        <input type="text" id="searchInput"
+               placeholder="Search songs, artists..."
+               oninput="debouncedSearch()">
+        <button type="submit">🔍</button>
     </form>
 
+    <div id="results"></div>
 </div>
 
-{% if video_id %}
-    <div class="player">
-        <h2>Now Playing</h2>
+<!-- 🎵 MOODS -->
+<div class="container">
+    <button class="card" onclick="playMusic('study')">📚 Study</button>
+    <button class="card" onclick="playMusic('gym')">💪 Gym</button>
+    <button class="card" onclick="playMusic('sad')">😔 Sad</button>
+    <button class="card" onclick="playMusic('chill')">😌 Chill</button>
+    <button class="card" onclick="playMusic('gaming')">🎮 Gaming</button>
+</div>
 
-        <iframe
-        src="https://www.youtube.com/embed/{{ video_id }}"
-        allowfullscreen>
-        </iframe>
+<!-- 🎬 PLAYER -->
+<div class="player">
+    <h2>Now Playing</h2>
+    <div id="player"></div>
+</div>
 
-        <form method="POST">
-            <input type="hidden" name="mood" value="{{ mood }}">
-            <input type="hidden" name="index" value="{{ index + 1 }}">
-            <button class="next-btn">⏭ Next</button>
-        </form>
-    </div>
-{% endif %}
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+let player;
+let currentResults = [];
+let currentIndex = 0;
+let debounceTimer;
+let selectedIndex = -1;
+
+/* 🔥 Auto focus */
+window.onload = () => {
+    document.getElementById("searchInput").focus();
+};
+
+/* 🎬 Player */
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '400',
+        width: '100%',
+        videoId: '',
+        events: {
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+/* 🔄 Auto next */
+function onPlayerStateChange(event) {
+    if (event.data === 0) {
+        playNext();
+    }
+}
+
+/* 🔍 Search submit */
+function handleSearch(e) {
+    e.preventDefault();
+    searchMusic();
+}
+
+/* 🔍 Debounce */
+function debouncedSearch() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(searchMusic, 400);
+}
+
+/* 🔍 Search */
+function searchMusic() {
+    let query = document.getElementById("searchInput").value;
+
+    if (!query.trim()) {
+        document.getElementById("results").innerHTML = "";
+        return;
+    }
+
+    document.getElementById("results").innerHTML =
+        "<div class='no-result'>Searching...</div>";
+
+    fetch("/search", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ query })
+    })
+    .then(res => res.json())
+    .then(data => {
+        currentResults = data;
+        currentIndex = 0;
+        selectedIndex = -1;
+        showResults(data);
+    });
+}
+
+/* 🎧 Show results */
+function showResults(data) {
+    let resultsDiv = document.getElementById("results");
+    resultsDiv.innerHTML = "";
+
+    if (data.length === 0) {
+        resultsDiv.innerHTML = "<div class='no-result'>No results found</div>";
+        return;
+    }
+
+    data.forEach((item, index) => {
+        let div = document.createElement("div");
+        div.className = "result-item";
+
+        let img = item.thumbnail || "https://img.icons8.com/ios-filled/50/ffffff/search--v1.png";
+
+        let title = item.title.length > 60
+            ? item.title.substring(0, 60) + "..."
+            : item.title;
+
+        div.innerHTML = `
+            <img src="${img}">
+            <div class="result-title">${title}</div>
+        `;
+
+        div.onclick = () => {
+            currentIndex = index;
+            highlightPlaying(index);
+            playVideo(item.video_id);
+            resultsDiv.innerHTML = "";
+        };
+
+        resultsDiv.appendChild(div);
+    });
+}
+
+/* 🎯 Highlight playing */
+function highlightPlaying(index) {
+    let items = document.querySelectorAll(".result-item");
+    items.forEach(item => item.classList.remove("playing"));
+
+    if (items[index]) {
+        items[index].classList.add("playing");
+    }
+}
+
+/* 🎬 Play */
+function playVideo(videoId) {
+    if (player) {
+        player.loadVideoById(videoId);
+    }
+}
+
+/* 🔄 Next */
+function playNext() {
+    currentIndex++;
+    if (currentIndex < currentResults.length) {
+        highlightPlaying(currentIndex);
+        playVideo(currentResults[currentIndex].video_id);
+    }
+}
+
+/* 🎵 Mood */
+function playMusic(mood) {
+    fetch("/get-music", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ mood })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.videos && data.videos.length > 0) {
+            currentResults = data.videos.map(v => ({ video_id: v }));
+            currentIndex = 0;
+            playVideo(currentResults[0].video_id);
+        }
+    });
+}
+
+/* ⬆️⬇️ Keyboard navigation */
+document.getElementById("searchInput").addEventListener("keydown", function(e) {
+    let items = document.querySelectorAll(".result-item");
+
+    if (e.key === "ArrowDown") {
+        selectedIndex++;
+        if (selectedIndex >= items.length) selectedIndex = 0;
+        updateSelection(items);
+    }
+
+    if (e.key === "ArrowUp") {
+        selectedIndex--;
+        if (selectedIndex < 0) selectedIndex = items.length - 1;
+        updateSelection(items);
+    }
+
+    if (e.key === "Enter" && selectedIndex >= 0) {
+        items[selectedIndex].click();
+    }
+});
+
+function updateSelection(items) {
+    items.forEach(item => item.classList.remove("active"));
+    if (items[selectedIndex]) {
+        items[selectedIndex].classList.add("active");
+    }
+}
+
+/* ❌ Click outside */
+document.addEventListener("click", function(e) {
+    if (!e.target.closest(".search-container")) {
+        document.getElementById("results").innerHTML = "";
+    }
+});
+</script>
 
 </body>
 </html>
