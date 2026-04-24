@@ -8,13 +8,13 @@
 <body>
 
 <h1>🎵 Smart Music App</h1>
-<p>Search or choose your vibe</p>
+<p>Search, queue & enjoy music</p>
 
 <!-- 🔍 SEARCH -->
 <div class="search-container">
     <form onsubmit="handleSearch(event)">
         <input type="text" id="searchInput"
-               placeholder="Search songs, artists..."
+               placeholder="Search songs..."
                oninput="debouncedSearch()">
         <button type="submit">🔍</button>
     </form>
@@ -22,33 +22,34 @@
     <div id="results"></div>
 </div>
 
-<!-- 🎵 MOODS -->
-<div class="container">
-    <button class="card" onclick="playMusic('study')">📚 Study</button>
-    <button class="card" onclick="playMusic('gym')">💪 Gym</button>
-    <button class="card" onclick="playMusic('sad')">😔 Sad</button>
-    <button class="card" onclick="playMusic('chill')">😌 Chill</button>
-    <button class="card" onclick="playMusic('gaming')">🎮 Gaming</button>
+<!-- 🎶 QUEUE -->
+<div class="queue-container">
+    <div class="queue-header">
+        <h3>🎶 Your Queue</h3>
+        <button onclick="clearQueue()">🗑</button>
+    </div>
+    <div id="queueList"></div>
 </div>
 
 <!-- 🎬 PLAYER -->
 <div class="player">
     <h2>Now Playing</h2>
     <div id="player"></div>
+    <button onclick="playNext()">⏭ Next</button>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
 let player;
-let currentResults = [];
+let playerReady = false;
+let queue = [];
 let currentIndex = 0;
 let debounceTimer;
-let selectedIndex = -1;
 
-/* 🔥 Auto focus */
 window.onload = () => {
     document.getElementById("searchInput").focus();
+    loadQueue();
 };
 
 /* 🎬 Player */
@@ -58,32 +59,30 @@ function onYouTubeIframeAPIReady() {
         width: '100%',
         videoId: '',
         events: {
+            'onReady': () => {
+                playerReady = true;
+                if (queue.length > 0) {
+                    playVideo(queue[currentIndex].video_id);
+                }
+            },
             'onStateChange': onPlayerStateChange
         }
     });
 }
 
-/* 🔄 Auto next */
 function onPlayerStateChange(event) {
     if (event.data === 0) {
         playNext();
     }
 }
 
-/* 🔍 Search submit */
+/* 🔍 SEARCH */
 function handleSearch(e) {
     e.preventDefault();
     searchMusic();
 }
 
-/* 🔍 Debounce */
 function debouncedSearch() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(searchMusic, 400);
-}
-
-/* 🔍 Search */
-function searchMusic() {
     let query = document.getElementById("searchInput").value;
 
     if (!query.trim()) {
@@ -91,8 +90,12 @@ function searchMusic() {
         return;
     }
 
-    document.getElementById("results").innerHTML =
-        "<div class='no-result'>Searching...</div>";
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(searchMusic, 400);
+}
+
+function searchMusic() {
+    let query = document.getElementById("searchInput").value;
 
     fetch("/search", {
         method: "POST",
@@ -100,127 +103,161 @@ function searchMusic() {
         body: JSON.stringify({ query })
     })
     .then(res => res.json())
-    .then(data => {
-        currentResults = data;
-        currentIndex = 0;
-        selectedIndex = -1;
-        showResults(data);
-    });
+    .then(data => showResults(data));
 }
 
-/* 🎧 Show results */
 function showResults(data) {
     let resultsDiv = document.getElementById("results");
     resultsDiv.innerHTML = "";
 
-    if (data.length === 0) {
-        resultsDiv.innerHTML = "<div class='no-result'>No results found</div>";
-        return;
-    }
-
-    data.forEach((item, index) => {
+    data.forEach(item => {
         let div = document.createElement("div");
         div.className = "result-item";
 
-        let img = item.thumbnail || "https://img.icons8.com/ios-filled/50/ffffff/search--v1.png";
-
-        let title = item.title.length > 60
-            ? item.title.substring(0, 60) + "..."
-            : item.title;
-
         div.innerHTML = `
-            <img src="${img}">
-            <div class="result-title">${title}</div>
+            <img src="${item.thumbnail}">
+            <div>${item.title}</div>
         `;
 
-        div.onclick = () => {
-            currentIndex = index;
-            highlightPlaying(index);
-            playVideo(item.video_id);
-            resultsDiv.innerHTML = "";
-        };
+        div.onclick = () => addToQueue(item);
 
         resultsDiv.appendChild(div);
     });
 }
 
-/* 🎯 Highlight playing */
-function highlightPlaying(index) {
-    let items = document.querySelectorAll(".result-item");
-    items.forEach(item => item.classList.remove("playing"));
+/* 🔥 ADD + PLAY */
+function addToQueue(item) {
+    queue.push(item);
+    currentIndex = queue.length - 1;
+    playVideo(item.video_id);
 
-    if (items[index]) {
-        items[index].classList.add("playing");
-    }
+    updateQueueUI();
+    saveQueue();
 }
 
-/* 🎬 Play */
+/* 🎧 PLAY */
 function playVideo(videoId) {
-    if (player) {
-        player.loadVideoById(videoId);
+    if (!playerReady) {
+        setTimeout(() => playVideo(videoId), 500);
+        return;
     }
+    player.loadVideoById(videoId);
 }
 
-/* 🔄 Next */
+/* ⏭ NEXT */
 function playNext() {
     currentIndex++;
-    if (currentIndex < currentResults.length) {
-        highlightPlaying(currentIndex);
-        playVideo(currentResults[currentIndex].video_id);
+
+    if (currentIndex >= queue.length) {
+        return;
     }
+
+    playVideo(queue[currentIndex].video_id);
+    updateQueueUI();
+    saveQueue();
 }
 
-/* 🎵 Mood */
-function playMusic(mood) {
-    fetch("/get-music", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ mood })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.videos && data.videos.length > 0) {
-            currentResults = data.videos.map(v => ({ video_id: v }));
-            currentIndex = 0;
-            playVideo(currentResults[0].video_id);
+/* 🎶 QUEUE UI (CLICKABLE) */
+function updateQueueUI() {
+    let qDiv = document.getElementById("queueList");
+    qDiv.innerHTML = "";
+
+    queue.forEach((item, index) => {
+        let div = document.createElement("div");
+        div.className = "queue-item";
+
+        if (index === currentIndex) {
+            div.classList.add("active");
         }
+
+        let thumbnail = item.thumbnail || "https://img.icons8.com/ios-filled/50/ffffff/music.png";
+
+        let parts = item.title.split("-");
+        let title = parts[0];
+        let artist = parts[1] || "Unknown";
+
+        div.innerHTML = `
+            <div class="queue-index">
+                ${index === currentIndex ? "▶" : index + 1}
+            </div>
+
+            <img class="queue-thumb" src="${thumbnail}">
+
+            <div class="queue-text">
+                <div class="queue-title">${title}</div>
+                <div class="queue-artist">${artist}</div>
+            </div>
+
+            <div class="queue-controls">
+                <button onclick="event.stopPropagation(); moveUp(${index})">↑</button>
+                <button onclick="event.stopPropagation(); moveDown(${index})">↓</button>
+                <button onclick="event.stopPropagation(); removeFromQueue(${index})">✖</button>
+            </div>
+        `;
+
+        div.onclick = () => {
+            currentIndex = index;
+            playVideo(item.video_id);
+            updateQueueUI();
+            saveQueue();
+        };
+
+        qDiv.appendChild(div);
     });
 }
 
-/* ⬆️⬇️ Keyboard navigation */
-document.getElementById("searchInput").addEventListener("keydown", function(e) {
-    let items = document.querySelectorAll(".result-item");
+/* ❌ REMOVE */
+function removeFromQueue(index) {
+    queue.splice(index, 1);
 
-    if (e.key === "ArrowDown") {
-        selectedIndex++;
-        if (selectedIndex >= items.length) selectedIndex = 0;
-        updateSelection(items);
+    if (index <= currentIndex && currentIndex > 0) {
+        currentIndex--;
     }
 
-    if (e.key === "ArrowUp") {
-        selectedIndex--;
-        if (selectedIndex < 0) selectedIndex = items.length - 1;
-        updateSelection(items);
-    }
-
-    if (e.key === "Enter" && selectedIndex >= 0) {
-        items[selectedIndex].click();
-    }
-});
-
-function updateSelection(items) {
-    items.forEach(item => item.classList.remove("active"));
-    if (items[selectedIndex]) {
-        items[selectedIndex].classList.add("active");
-    }
+    updateQueueUI();
+    saveQueue();
 }
 
-/* ❌ Click outside */
-document.addEventListener("click", function(e) {
-    if (!e.target.closest(".search-container")) {
-        document.getElementById("results").innerHTML = "";
+/* 🔼 MOVE */
+function moveUp(index) {
+    if (index === 0) return;
+    [queue[index], queue[index - 1]] = [queue[index - 1], queue[index]];
+    updateQueueUI();
+    saveQueue();
+}
+
+function moveDown(index) {
+    if (index === queue.length - 1) return;
+    [queue[index], queue[index + 1]] = [queue[index + 1], queue[index]];
+    updateQueueUI();
+    saveQueue();
+}
+
+/* 🗑 CLEAR */
+function clearQueue() {
+    queue = [];
+    currentIndex = 0;
+    updateQueueUI();
+    localStorage.clear();
+}
+
+/* 💾 SAVE */
+function saveQueue() {
+    localStorage.setItem("musicQueue", JSON.stringify(queue));
+    localStorage.setItem("currentIndex", currentIndex);
+}
+
+/* 📂 LOAD */
+function loadQueue() {
+    let savedQueue = localStorage.getItem("musicQueue");
+    let savedIndex = localStorage.getItem("currentIndex");
+
+    if (savedQueue) {
+        queue = JSON.parse(savedQueue);
+        currentIndex = savedIndex ? parseInt(savedIndex) : 0;
+        updateQueueUI();
     }
-});
+}
 </script>
 
 </body>

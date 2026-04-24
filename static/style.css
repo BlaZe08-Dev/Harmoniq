@@ -1,130 +1,171 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #0d0d0d;
     color: white;
     text-align: center;
 }
 
-h1 {
-    margin-top: 20px;
-}
-
-/* 🔍 Search */
+/* SEARCH */
 .search-container {
-    margin-top: 20px;
-    position: relative;
-    display: inline-block;
+    margin: 20px auto;
+    width: 420px;
 }
 
-#searchInput {
+.search-container input {
+    width: 75%;
     padding: 10px;
-    width: 400px;
     border-radius: 20px;
     border: none;
     outline: none;
-    background: #1f1f1f;
-    color: white;
 }
 
-#searchInput:focus {
-    box-shadow: 0 0 10px #ff4c60;
-}
-
-/* Button */
 .search-container button {
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 50%;
     border: none;
     background: #ff4c60;
     color: white;
     cursor: pointer;
 }
 
-.search-container button:hover {
-    background: #ff2e4d;
-}
-
-/* Suggestions */
+/* RESULTS */
 #results {
-    position: absolute;
-    top: 45px;
-    left: 0;
-    width: 100%;
-    background: #1a1a1a;
+    margin-top: 10px;
+    background: #181818;
     border-radius: 10px;
     overflow: hidden;
-    z-index: 100;
-    scroll-behavior: smooth;
 }
 
-/* Items */
 .result-item {
     display: flex;
     align-items: center;
-    padding: 10px;
     gap: 10px;
+    padding: 8px 10px;
     cursor: pointer;
 }
 
 .result-item:hover {
-    background: #2a2a2a;
+    background: #282828;
 }
 
-/* Selected */
-.result-item.active {
-    background: #444;
-}
-
-/* Playing */
-.result-item.playing {
-    background: #ff4c60;
-}
-
-/* Image */
 .result-item img {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
 }
 
-/* Text */
-.result-title {
-    font-size: 14px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* QUEUE (SPOTIFY STYLE) */
+.queue-container {
+    width: 650px;
+    margin: 30px auto;
+    background: #121212;
+    border-radius: 12px;
+    padding: 10px 15px;
 }
 
-/* No result */
-.no-result {
-    padding: 10px;
-}
-
-/* Mood */
-.container {
+/* HEADER */
+.queue-header {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 20px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.card {
-    padding: 12px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    background: #1f1f1f;
+.queue-header button {
+    background: transparent;
+    border: 1px solid #444;
     color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
     cursor: pointer;
 }
 
-.card:hover {
-    background: #ff4c60;
+.queue-header button:hover {
+    background: #333;
 }
 
-/* Player */
+/* LIST */
+#queueList {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+/* ROW */
+.queue-item {
+    display: grid;
+    grid-template-columns: 30px 50px 1fr 120px;
+    align-items: center;
+    padding: 8px 5px;
+    border-radius: 8px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.queue-item:hover {
+    background: #1f1f1f;
+}
+
+/* INDEX / PLAY ICON */
+.queue-index {
+    font-size: 14px;
+    color: #aaa;
+}
+
+/* THUMB */
+.queue-thumb {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+}
+
+/* TEXT */
+.queue-text {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.queue-title {
+    font-size: 14px;
+}
+
+.queue-artist {
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* CONTROLS */
+.queue-controls {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+.queue-controls button {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.queue-controls button:hover {
+    color: white;
+}
+
+/* ACTIVE ROW */
+.queue-item.active {
+    color: #1db954;
+}
+
+.queue-item.active .queue-index {
+    color: #1db954;
+}
+
+/* PLAYER */
 .player {
-    margin-top: 30px;
+    margin-top: 20px;
+}
+
+iframe {
+    border-radius: 10px;
 }
