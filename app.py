@@ -1,10 +1,10 @@
-import requests
-import html
 from flask import Flask, render_template, request, jsonify
+import requests
 
 app = Flask(__name__)
 
-API_KEY = "AIzaSyD2v6Ck_pKvdNGq2wcz0LefIffbQP59fKM"
+JAMENDO_CLIENT_ID = "21e5060d"  # 🔥 put your Jamendo client ID here
+
 
 @app.route("/")
 def home():
@@ -13,37 +13,24 @@ def home():
 
 @app.route("/search", methods=["POST"])
 def search():
-    try:
-        query = request.json.get("query")
+    query = request.json.get("query")
 
-        if not query:
-            return jsonify([])
+    url = f"https://api.jamendo.com/v3.0/tracks/?client_id={JAMENDO_CLIENT_ID}&format=json&limit=10&search={query}"
 
-        url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&videoSyndicated=true&maxResults=5&q={query}&key={API_KEY}"
+    response = requests.get(url)
+    data = response.json()
 
-        response = requests.get(url)
+    results = []
 
-        if response.status_code != 200:
-            return jsonify([])
+    for item in data.get("results", []):
+        results.append({
+            "title": item["name"],
+            "artist": item["artist_name"],
+            "thumbnail": item["album_image"],
+            "audio": item["audio"]  # ✅ REAL AUDIO URL
+        })
 
-        data = response.json()
-        results = []
-
-        for item in data.get("items", []):
-            video_id = item["id"]["videoId"]
-            title = html.unescape(item["snippet"]["title"])
-
-            results.append({
-                "title": title,
-                "video_id": video_id,
-                "thumbnail": item["snippet"]["thumbnails"]["default"]["url"]
-            })
-
-        return jsonify(results)
-
-    except Exception as e:
-        print("ERROR:", e)
-        return jsonify([])
+    return jsonify(results)
 
 
 if __name__ == "__main__":

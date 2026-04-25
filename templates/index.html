@@ -7,108 +7,177 @@
 
 <body>
 
-<h1>🎵 Smart Music App</h1>
-<p>Search, queue & enjoy music</p>
+<div id="sidebarTrigger"></div>
 
-<!-- 🔍 SEARCH -->
-<div class="search-container">
-    <form onsubmit="handleSearch(event)">
-        <input type="text" id="searchInput"
-               placeholder="Search songs..."
-               oninput="debouncedSearch()">
-        <button type="submit">🔍</button>
-    </form>
+<div class="app">
 
-    <div id="results"></div>
-</div>
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <h2>🎵 Music</h2>
 
-<!-- 🎶 QUEUE -->
-<div class="queue-container">
-    <div class="queue-header">
-        <h3>🎶 Your Queue</h3>
-        <button onclick="clearQueue()">🗑</button>
+        <p onclick="showHome()">🏠 Home</p>
+        <p onclick="showQueue()">📜 Queue</p>
+
+        <h3>📂 Playlists</h3>
+        <button onclick="createPlaylist()">+ New Playlist</button>
+        <div id="playlistList"></div>
     </div>
-    <div id="queueList"></div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- SEARCH -->
+        <div class="search-container">
+            <form id="searchForm">
+                <input type="text" id="searchInput" placeholder="Search music...">
+                <button type="submit">🔍</button>
+            </form>
+            <div id="results"></div>
+        </div>
+
+        <!-- HOME -->
+        <div id="homePage" class="home-feed">
+            <h2 class="home-title">🎧 Recommended for you</h2>
+            <div id="recommendList"></div>
+        </div>
+
+        <!-- QUEUE -->
+        <div id="queuePage" style="display:none;">
+            <h2>🎶 Your Queue</h2>
+            <div id="queueList"></div>
+        </div>
+
+        <!-- PLAYLIST -->
+        <div id="playlistPage" style="display:none;">
+            <h2 id="playlistTitle">Playlist</h2>
+            <div id="playlistSongs"></div>
+        </div>
+
+    </div>
 </div>
 
-<!-- 🎬 PLAYER -->
-<div class="player">
-    <h2>Now Playing</h2>
-    <div id="player"></div>
-    <button onclick="playNext()">⏭ Next</button>
-</div>
+<audio id="audioPlayer"></audio>
 
-<script src="https://www.youtube.com/iframe_api"></script>
+<!-- PLAYER -->
+<div class="player-bar">
+
+    <div class="player-left">
+        <img id="playerThumbnail" src="">
+        <div class="player-info">
+            <div id="nowPlaying">No song</div>
+            <div id="artistName">Artist</div>
+        </div>
+    </div>
+
+    <div class="player-center">
+
+        <div class="player-controls">
+            <button onclick="toggleShuffle()">🔀</button>
+            <button onclick="playPrevious()">⏮</button>
+
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+
+            <button onclick="playNext()">⏭</button>
+            <button onclick="toggleRepeat()">🔁</button>
+        </div>
+
+        <div class="progress-container">
+            <span id="currentTime">0:00</span>
+            <input type="range" id="progressBar" min="0" max="100"
+                   onchange="seekAudio(this.value)">
+            <span id="durationText">0:00</span>
+        </div>
+
+    </div>
+
+    <div class="player-right">
+        <span>🔊</span>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.01"
+               onchange="setVolume(this.value)">
+    </div>
+
+</div>
 
 <script>
-let player;
-let playerReady = false;
 let queue = [];
-let currentIndex = 0;
+let currentIndex = -1;
+let isShuffle = false;
+let isRepeat = false;
 let debounceTimer;
 
-window.onload = () => {
-    document.getElementById("searchInput").focus();
-    loadQueue();
-};
+let playlists = JSON.parse(localStorage.getItem("playlists")) || {};
 
-/* 🎬 Player */
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '400',
-        width: '100%',
-        videoId: '',
-        events: {
-            'onReady': () => {
-                playerReady = true;
-                if (queue.length > 0) {
-                    playVideo(queue[currentIndex].video_id);
-                }
-            },
-            'onStateChange': onPlayerStateChange
-        }
-    });
+const audio = document.getElementById("audioPlayer");
+
+const searchInput = document.getElementById("searchInput");
+const results = document.getElementById("results");
+const searchForm = document.getElementById("searchForm");
+const queueList = document.getElementById("queueList");
+
+/* SIDEBAR */
+const sidebar = document.getElementById("sidebar");
+const trigger = document.getElementById("sidebarTrigger");
+
+trigger.addEventListener("mouseenter", () => {
+    sidebar.classList.add("active");
+    document.body.classList.add("sidebar-open");
+});
+
+sidebar.addEventListener("mouseleave", () => {
+    sidebar.classList.remove("active");
+    document.body.classList.remove("sidebar-open");
+});
+
+/* NAV */
+function showHome() {
+    document.getElementById("homePage").style.display = "block";
+    document.getElementById("queuePage").style.display = "none";
+    document.getElementById("playlistPage").style.display = "none";
 }
 
-function onPlayerStateChange(event) {
-    if (event.data === 0) {
-        playNext();
-    }
+function showQueue() {
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("queuePage").style.display = "block";
+    document.getElementById("playlistPage").style.display = "none";
 }
 
-/* 🔍 SEARCH */
-function handleSearch(e) {
+/* SEARCH */
+searchForm.addEventListener("submit", e => {
     e.preventDefault();
     searchMusic();
-}
+});
 
-function debouncedSearch() {
-    let query = document.getElementById("searchInput").value;
+searchInput.addEventListener("input", () => {
+    let q = searchInput.value.trim();
 
-    if (!query.trim()) {
-        document.getElementById("results").innerHTML = "";
+    if (!q) {
+        results.innerHTML = "";
         return;
     }
 
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(searchMusic, 400);
-}
+});
+
+/* CLOSE SUGGESTIONS WHEN CLICK OUTSIDE */
+document.addEventListener("click", function(e) {
+    if (!e.target.closest(".search-container")) {
+        results.innerHTML = "";
+    }
+});
 
 function searchMusic() {
-    let query = document.getElementById("searchInput").value;
-
     fetch("/search", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query: searchInput.value })
     })
     .then(res => res.json())
-    .then(data => showResults(data));
+    .then(showResults);
 }
 
 function showResults(data) {
-    let resultsDiv = document.getElementById("results");
-    resultsDiv.innerHTML = "";
+    results.innerHTML = "";
 
     data.forEach(item => {
         let div = document.createElement("div");
@@ -116,148 +185,233 @@ function showResults(data) {
 
         div.innerHTML = `
             <img src="${item.thumbnail}">
-            <div>${item.title}</div>
+            <div>
+                <div>${item.title}</div>
+                <small>${item.artist}</small>
+            </div>
         `;
 
         div.onclick = () => addToQueue(item);
-
-        resultsDiv.appendChild(div);
+        results.appendChild(div);
     });
 }
 
-/* 🔥 ADD + PLAY */
+/* RECOMMEND */
+function loadRecommendations() {
+    let queries = ["chill", "lofi", "pop", "romantic", "gaming"];
+
+    let container = document.getElementById("recommendList");
+    container.innerHTML = "";
+
+    queries.forEach(q => {
+        fetch("/search", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ query: q + " music" })
+        })
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(item => {
+                let div = document.createElement("div");
+                div.className = "recommend-item";
+
+                div.innerHTML = `
+                    <img src="${item.thumbnail}">
+                    <div>
+                        <div>${item.title}</div>
+                        <small>${item.artist}</small>
+                    </div>
+                `;
+
+                div.onclick = () => addToQueue(item);
+                container.appendChild(div);
+            });
+        });
+    });
+}
+
+/* QUEUE */
 function addToQueue(item) {
     queue.push(item);
     currentIndex = queue.length - 1;
-    playVideo(item.video_id);
-
+    playAudio(item.audio);
     updateQueueUI();
-    saveQueue();
 }
 
-/* 🎧 PLAY */
-function playVideo(videoId) {
-    if (!playerReady) {
-        setTimeout(() => playVideo(videoId), 500);
-        return;
-    }
-    player.loadVideoById(videoId);
-}
-
-/* ⏭ NEXT */
-function playNext() {
-    currentIndex++;
-
-    if (currentIndex >= queue.length) {
-        return;
-    }
-
-    playVideo(queue[currentIndex].video_id);
-    updateQueueUI();
-    saveQueue();
-}
-
-/* 🎶 QUEUE UI (CLICKABLE) */
 function updateQueueUI() {
-    let qDiv = document.getElementById("queueList");
-    qDiv.innerHTML = "";
+    queueList.innerHTML = "";
 
     queue.forEach((item, index) => {
         let div = document.createElement("div");
         div.className = "queue-item";
-
-        if (index === currentIndex) {
-            div.classList.add("active");
-        }
-
-        let thumbnail = item.thumbnail || "https://img.icons8.com/ios-filled/50/ffffff/music.png";
-
-        let parts = item.title.split("-");
-        let title = parts[0];
-        let artist = parts[1] || "Unknown";
+        div.draggable = true;
 
         div.innerHTML = `
-            <div class="queue-index">
-                ${index === currentIndex ? "▶" : index + 1}
+        <div class="queue-left">
+            <img src="${item.thumbnail}">
+            <div>
+                <div>${item.title}</div>
+                <small>${item.artist}</small>
             </div>
+        </div>
 
-            <img class="queue-thumb" src="${thumbnail}">
-
-            <div class="queue-text">
-                <div class="queue-title">${title}</div>
-                <div class="queue-artist">${artist}</div>
+        <div class="queue-menu">
+            ⋮
+            <div class="menu-dropdown">
+                <div onclick="removeFromQueue(${index}); event.stopPropagation()">Remove</div>
+                <div onclick="addSongToPlaylist(${index}); event.stopPropagation()">Add to Playlist</div>
             </div>
-
-            <div class="queue-controls">
-                <button onclick="event.stopPropagation(); moveUp(${index})">↑</button>
-                <button onclick="event.stopPropagation(); moveDown(${index})">↓</button>
-                <button onclick="event.stopPropagation(); removeFromQueue(${index})">✖</button>
-            </div>
+        </div>
         `;
 
         div.onclick = () => {
             currentIndex = index;
-            playVideo(item.video_id);
+            playAudio(item.audio);
             updateQueueUI();
-            saveQueue();
         };
 
-        qDiv.appendChild(div);
+        if (index === currentIndex) {
+            div.style.background = "#1db95433";
+        }
+
+        queueList.appendChild(div);
     });
 }
 
-/* ❌ REMOVE */
+/* PLAYLIST */
+function createPlaylist() {
+    let name = prompt("Playlist name:");
+    if (!name) return;
+    playlists[name] = [];
+    savePlaylists();
+    renderPlaylists();
+}
+
+function renderPlaylists() {
+    document.getElementById("playlistList").innerHTML = "";
+
+    Object.keys(playlists).forEach(name => {
+        let div = document.createElement("div");
+        div.innerText = name;
+        div.onclick = () => openPlaylist(name);
+        document.getElementById("playlistList").appendChild(div);
+    });
+}
+
+function openPlaylist(name) {
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("queuePage").style.display = "none";
+    document.getElementById("playlistPage").style.display = "block";
+
+    document.getElementById("playlistTitle").innerText = name;
+    let container = document.getElementById("playlistSongs");
+    container.innerHTML = "";
+
+    playlists[name].forEach(song => {
+        let div = document.createElement("div");
+        div.className = "queue-item";
+
+        div.innerHTML = `
+            <img src="${song.thumbnail}">
+            <div>
+                <div>${song.title}</div>
+                <small>${song.artist}</small>
+            </div>
+        `;
+
+        div.onclick = () => playAudio(song.audio);
+        container.appendChild(div);
+    });
+}
+
+function savePlaylists() {
+    localStorage.setItem("playlists", JSON.stringify(playlists));
+}
+
+/* PLAYER */
+function playAudio(url) {
+    audio.src = url;
+    audio.play();
+
+    let song = queue[currentIndex];
+
+    document.getElementById("nowPlaying").innerText = song?.title || "No song";
+    document.getElementById("artistName").innerText = song?.artist || "";
+    document.getElementById("playerThumbnail").src = song?.thumbnail || "";
+
+    document.getElementById("playBtn").innerText = "⏸";
+}
+
+function togglePlay() {
+    let btn = document.getElementById("playBtn");
+
+    if (audio.paused) {
+        audio.play();
+        btn.innerText = "⏸";
+    } else {
+        audio.pause();
+        btn.innerText = "▶";
+    }
+}
+
+function playNext() {
+    if (!queue.length) return;
+
+    currentIndex = (currentIndex + 1) % queue.length;
+    playAudio(queue[currentIndex].audio);
+}
+
+function playPrevious() {
+    currentIndex = (currentIndex - 1 + queue.length) % queue.length;
+    playAudio(queue[currentIndex].audio);
+}
+
+function toggleShuffle() { isShuffle = !isShuffle; }
+function toggleRepeat() { isRepeat = !isRepeat; }
+function setVolume(v) { audio.volume = v; }
+
+/* PROGRESS */
+audio.addEventListener("timeupdate", () => {
+    if (!audio.duration) return;
+
+    document.getElementById("progressBar").value =
+        (audio.currentTime / audio.duration) * 100;
+
+    document.getElementById("currentTime").innerText = formatTime(audio.currentTime);
+    document.getElementById("durationText").innerText = formatTime(audio.duration);
+});
+
+audio.addEventListener("ended", playNext);
+
+function seekAudio(val) {
+    audio.currentTime = (val / 100) * audio.duration;
+}
+
+function formatTime(sec) {
+    let m = Math.floor(sec / 60);
+    let s = Math.floor(sec % 60);
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+}
+
 function removeFromQueue(index) {
     queue.splice(index, 1);
-
-    if (index <= currentIndex && currentIndex > 0) {
-        currentIndex--;
-    }
-
+    if (index <= currentIndex) currentIndex--;
     updateQueueUI();
-    saveQueue();
 }
 
-/* 🔼 MOVE */
-function moveUp(index) {
-    if (index === 0) return;
-    [queue[index], queue[index - 1]] = [queue[index - 1], queue[index]];
-    updateQueueUI();
-    saveQueue();
-}
-
-function moveDown(index) {
-    if (index === queue.length - 1) return;
-    [queue[index], queue[index + 1]] = [queue[index + 1], queue[index]];
-    updateQueueUI();
-    saveQueue();
-}
-
-/* 🗑 CLEAR */
-function clearQueue() {
-    queue = [];
-    currentIndex = 0;
-    updateQueueUI();
-    localStorage.clear();
-}
-
-/* 💾 SAVE */
-function saveQueue() {
-    localStorage.setItem("musicQueue", JSON.stringify(queue));
-    localStorage.setItem("currentIndex", currentIndex);
-}
-
-/* 📂 LOAD */
-function loadQueue() {
-    let savedQueue = localStorage.getItem("musicQueue");
-    let savedIndex = localStorage.getItem("currentIndex");
-
-    if (savedQueue) {
-        queue = JSON.parse(savedQueue);
-        currentIndex = savedIndex ? parseInt(savedIndex) : 0;
-        updateQueueUI();
+function addSongToPlaylist(index) {
+    let name = prompt("Playlist name:");
+    if (playlists[name]) {
+        playlists[name].push(queue[index]);
+        savePlaylists();
     }
 }
+
+/* INIT */
+window.onload = () => {
+    loadRecommendations();
+    renderPlaylists();
+};
 </script>
 
 </body>
