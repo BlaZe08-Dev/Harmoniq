@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
-import requests
+import requests, time
 
+cache = {}
+CACHE_TTL = 600 #10 minutes
 app = Flask(__name__)
 
 JAMENDO_CLIENT_ID = "21e5060d"  # 🔥 put your Jamendo client ID here
@@ -13,7 +15,14 @@ def home():
 
 @app.route("/search", methods=["POST"])
 def search():
-    query = request.json.get("query")
+    query = request.json.get("query").lower()
+
+    
+    # Cache with expiry
+    if query in cache:
+        data, timestamp = cache[query]
+        if time.time() - timestamp < CACHE_TTL:
+            return jsonify(data)
 
     url = f"https://api.jamendo.com/v3.0/tracks/?client_id={JAMENDO_CLIENT_ID}&format=json&limit=10&search={query}"
 
@@ -29,6 +38,9 @@ def search():
             "thumbnail": item["album_image"],
             "audio": item["audio"]  # ✅ REAL AUDIO URL
         })
+
+    # 🔥 STORE WITH TIME
+    cache[query] = (results, time.time())
 
     return jsonify(results)
 
