@@ -1,3 +1,6 @@
+## 🌐 Live Demo
+https://harmoniq-yvun.onrender.com
+
 # 🎧 Harmoniq
 
 Harmoniq is a modern, Spotify-inspired music streaming web app built with Flask and JavaScript.  
