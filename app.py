@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, jsonify
-import requests, time
+import requests, time, os
+from dotenv import load_dotenv
 
+load_dotenv()  
 cache = {}
 CACHE_TTL = 600 #10 minutes
 app = Flask(__name__)
 
-JAMENDO_CLIENT_ID = "21e5060d"  # 🔥 put your Jamendo client ID here
+JAMENDO_CLIENT_ID = os.getenv("JAMENDO_CLIENT_ID")  # 🔥 put your Jamendo client ID here
 
 
 @app.route("/")
