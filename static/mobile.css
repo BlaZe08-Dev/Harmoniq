@@ -1,0 +1,133 @@
+/* MOBILE UI */
+
+@media screen and (max-width: 768px){
+
+    /* APP LAYOUT */
+    .app{
+        flex-direction: column;
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+        position: fixed;
+
+        left: -100%;
+        top: 0;
+
+        width: 260px;
+        height: 100vh;
+
+        z-index: 99999;
+
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.active{
+        left: 0;
+    }
+
+    /* MAIN */
+    .main{
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* SEARCH */
+    .search-container{
+        width: 100%;
+    }
+
+    .search-container input{
+        width: 100%;
+        font-size: 15px;
+    }
+
+    /* HOME LAYOUT */
+    .home-layout{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .home-left,
+    .home-right{
+        width: 100%;
+    }
+
+    /* RECENTLY PLAYED GRID */
+    .recent-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* PLAYER BAR */
+    .player-bar{
+        height: auto;
+
+        padding: 12px;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .player-left,
+    .player-center,
+    .player-right{
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    .player-left{
+        justify-content: flex-start;
+    }
+
+    /* PLAYER IMAGE */
+    .player-left img{
+        width: 55px;
+        height: 55px;
+    }
+
+    /* SONG INFO */
+    .song-info h4{
+        font-size: 15px;
+    }
+
+    .song-info p{
+        font-size: 12px;
+    }
+
+    /* CONTROLS */
+    .controls{
+        gap: 18px;
+    }
+
+    /* PLAY BUTTON */
+    #playPauseBtn{
+        width: 48px;
+        height: 48px;
+
+        font-size: 18px;
+    }
+
+    /* PROGRESS BAR */
+    .progress-container{
+        width: 100%;
+    }
+
+    /* FULLSCREEN PLAYER */
+    .fs-content{
+        width: 92%;
+        padding: 25px;
+    }
+
+    #fsThumbnail{
+        width: 220px;
+        height: 220px;
+    }
+
+    .loader-title{
+        font-size: 22px;
+        letter-spacing: 8px;
+    }
+
+}
