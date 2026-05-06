@@ -1,0 +1,28 @@
+<!-- FULLSCREEN PLAYER -->
+<div id="fullscreenPlayer" class="fullscreen-player hidden">
+    <canvas id="colorCanvas" style="display:none;"></canvas>
+    <div class="fs-bg" id="fsBg"></div>
+
+    <div class="fs-content">
+
+        <img id="fsThumbnail" src="">
+
+        <h2 id="fsTitle">Title</h2>
+        <p id="fsArtist">Artist</p>
+
+        <div class="fs-controls">
+            <button onclick="playPrevious()">⏮</button>
+            <button id="fsPlayBtn" onclick="togglePlay()">▶</button>
+            <button onclick="playNext()">⏭</button>
+        </div>
+
+        <div class="fs-progress">
+            <span id="fsCurrent">0:00</span>
+            <input type="range" id="fsProgress" min="0" max="100">
+            <span id="fsDuration">0:00</span>
+        </div>
+
+        <button id="closeFS">⬇ Close</button>
+
+    </div>
+</div>
