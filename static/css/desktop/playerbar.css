@@ -1,0 +1,238 @@
+/* PLAYER BAR */
+.player-bar {
+    position: fixed;
+    bottom: 0;
+    height: 56px;
+    left: 0;
+    right: 0;
+
+    background: transparent;
+    backdrop-filter: blur(25px);
+
+    border-top: 1px solid rgba(255,255,255,0.08);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 4px 14px;
+
+    z-index: 9999;
+    transition: 0.4s ease;
+}
+
+/* LEFT */
+.player-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 25%;
+    cursor: pointer;
+}
+
+#playerThumbnail {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* CENTER */
+.player-center {
+    width: 50%;
+    text-align: center;
+}
+
+.player-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.player-controls button {
+    background: transparent !important;
+    border: none !important;
+    color: #aaa !important;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.player-controls button:hover {
+    color: white !important;
+    transform: scale(1.2);
+}
+
+.player-controls button.active {
+    color: #1db954; /* Spotify green */
+}
+
+/* PLAY BUTTON */
+.play-btn {
+    width: 34px;
+    height: 34px;
+
+    font-size: 16px;
+
+    border-radius: 50%;
+    background: #ffffff;
+    color: black;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.08);
+}
+
+/* PROGRESS */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#progressBar {
+    flex: 1;
+    height: 4px;
+    accent-color: #1db954;
+}
+
+/* RIGHT */
+.player-right {
+    width: 20%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-right: 25px;
+    box-sizing: border-box;
+}
+
+/* SLIM SPOTIFY STYLE */
+#volumeControl {
+    width: 0;
+    height: 3px;              /* 🔥 thin */
+    cursor: pointer;
+
+    appearance: none;
+    background: #444;
+    border-radius: 10px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+/* THUMB */
+#volumeControl::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #aaa;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#volumeControl:hover::-webkit-slider-thumb {
+    background: white;
+}
+
+#volumeIcon {
+    color: #aaa;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+#volumeIcon:hover {
+    color: white;
+}
+
+.volume-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.volume-wrapper:hover #volumeControl {
+    width: 80px;
+    opacity: 1;
+}
+
+#expandBtn {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: 0.2s;
+}
+
+#expandBtn:hover {
+    color: white;
+    transform: none;
+}
+
+.equalizer {
+    display: flex;
+    gap: 3px;
+    margin-left: 10px;
+    align-items: flex-end;
+}
+
+.equalizer span {
+    width: 3px;
+    height: 6px;
+    background: #1db954;
+    border-radius: 2px;
+    transition: height 0.1s linear;
+}
+
+#addBtn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.2);
+    background: transparent;
+
+    color: #aaa;
+    font-size: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#addBtn:hover {
+    color: white;
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.play-btn.playing {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(29,185,84,0.6); }
+    70% { box-shadow: 0 0 0 10px rgba(29,185,84,0); }
+    100% { box-shadow: 0 0 0 0 rgba(29,185,84,0); }
+}

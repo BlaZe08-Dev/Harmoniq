@@ -1,0 +1,51 @@
+@media (max-width: 768px) {
+
+    /* MOBILE SIDEBAR */
+    .sidebar {
+        left: 0;
+        transform: translateX(-100%);
+
+        width: 260px;
+
+        transition:
+            transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+        z-index: 2000;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    /* OVERLAY */
+    .mobile-overlay {
+        position: fixed;
+        inset: 0;
+
+        background: rgba(0,0,0,0.45);
+
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+
+        opacity: 0;
+        pointer-events: none;
+
+        transition: 0.3s ease;
+
+        z-index: 1500;
+    }
+
+    .mobile-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* DISABLE DESKTOP HOVER TRIGGER */
+    #sidebarTrigger {
+        display: none;
+    }
+
+    body.sidebar-open .main {
+        padding-left: 20px;
+    }
+}

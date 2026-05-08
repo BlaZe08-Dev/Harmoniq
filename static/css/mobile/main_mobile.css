@@ -1,0 +1,241 @@
+/* MOBILE UI */
+
+@media screen and (max-width: 768px){
+
+    
+    /* FIX BODY */
+    html,
+    body{
+        overflow: hidden;
+        height: 100%;
+        margin: 0;
+    }
+
+    /* APP */
+    .app{
+        display: flex;
+        flex-direction: column;
+
+        height: calc(100vh - 90px);
+
+        overflow: hidden;
+    }
+
+    /* MAIN CONTENT SCROLL */
+    .main{
+        width: 100%;
+        flex: 1;
+
+        height: 100%;
+
+        overflow-y: auto;
+
+        padding: 15px;
+        padding-bottom: 180px;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* SMOOTH MOBILE SCROLLBAR */
+    .main::-webkit-scrollbar{
+        width: 4px;
+    }
+
+    .main::-webkit-scrollbar-thumb{
+        background: rgba(255,255,255,0.15);
+        border-radius: 20px;
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+        position: fixed;
+
+        left: -100%;
+        top: 0;
+
+        width: 260px;
+        height: 100vh;
+
+        z-index: 99999;
+
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.active{
+        left: 0;
+    }
+
+    /* SEARCH */
+    .search-container{
+        width: 100%;
+    }
+
+    .search-container input{
+        width: 100%;
+        font-size: 15px;
+    }
+
+    /* HOME LAYOUT */
+    .home-layout{
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
+    .home-left,
+    .home-right{
+        width: 100%;
+    }
+
+    /* RECOMMENDATION TEXT */
+    .recommend-item div div{
+        font-size: 15px;
+    }
+
+    .recommend-item small{
+        font-size: 13px;
+    }
+
+    /* RECENTLY PLAYED */
+    .album-title{
+        font-size: 14px;
+    }
+
+    .album-artist{
+        font-size: 12px;
+    }
+
+    /* RECENTLY PLAYED GRID */
+    .recent-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* PLAYER BAR */
+    .player-bar{
+        height: auto;
+
+        padding: 12px;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .player-left,
+    .player-center,
+    .player-right{
+        width: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .player-left{
+        justify-content: flex-start;
+    }
+
+    /* PLAYER IMAGE */
+    .player-left img{
+        width: 55px;
+        height: 55px;
+    }
+
+    /* PLAYER INFO */
+    .player-info #nowPlaying{
+        font-size: 15px;
+    }
+
+    .player-info #artistName{
+        font-size: 13px;
+    }
+
+    /* PLAYER CONTROLS */
+    .player-controls{
+        gap: 18px;
+    }
+
+    /* PLAY BUTTON */
+    .play-btn{
+        width: 48px;
+        height: 48px;
+
+        font-size: 18px;
+    }
+
+    /* PROGRESS BAR */
+    .progress-container{
+        width: 100%;
+    }
+
+    /* FULLSCREEN PLAYER */
+    .fs-content{
+        width: 92%;
+
+        padding: 25px;
+    }
+
+    #fsThumbnail{
+        width: 220px;
+        height: 220px;
+    }
+
+    /* LOADER */
+    .loader-title{
+        font-size: 22px;
+
+        letter-spacing: 8px;
+    }
+}
+.mobile-topbar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .mobile-topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        height: 64px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 18px;
+
+        background: rgba(15, 15, 15, 0.75);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+
+        z-index: 1000;
+    }
+
+    .menu-btn {
+        background: transparent;
+        border: none;
+
+        color: white;
+
+        font-size: 24px;
+
+        cursor: pointer;
+    }
+
+    .mobile-logo {
+        font-size: 20px;
+        font-weight: 700;
+
+        letter-spacing: 1px;
+
+        color: white;
+    }
+}

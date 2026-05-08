@@ -2,8 +2,29 @@
 <html>
 <head>
     <title>Harmoniq 🎧</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="/static/mobile.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global/reset.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global/variables.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global/base.css') }}">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/main_desktop.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/sidebar.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/playerbar.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/fullscreen.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/animations.css') }}">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile/main_mobile.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile/mobile_sidebar.css') }}">
+
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/727/727245.png">
 </head>
 
@@ -13,11 +34,16 @@
 
 <div id="appBackground"></div>
 
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
 <div id="sidebarTrigger"></div>
+
+{% include 'components/mobile_topbar.html' %}
 
 <div class="app">
 
     {% include 'components/sidebar.html' %}
+    
 
     <!-- MAIN -->
     <div class="main">
@@ -45,9 +71,19 @@
 
 {% include 'components/playerbar.html' %}
 
-
 {% include 'components/fullscreen_player.html' %}
 
+<script src="{{ url_for('static', filename='js/modules/audio.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/navigation.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/fullscreen.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/playlist.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/queue.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/search.js') }}"></script>
 
 <script>
 let queue = [];
@@ -61,452 +97,89 @@ let playlists = JSON.parse(localStorage.getItem("playlists")) || {};
 
 const audio = document.getElementById("audioPlayer");
 
-
 const searchInput = document.getElementById("searchInput");
 const searchCache = JSON.parse(localStorage.getItem("searchCache")) || {};
 const results = document.getElementById("results");
 const searchForm = document.getElementById("searchForm");
 const queueList = document.getElementById("queueList");
+
 const fsPlayer = document.getElementById("fullscreenPlayer");
 const fsBg = document.getElementById("fsBg");
+
 const appBg = document.getElementById("appBackground");
 
-/* SIDEBAR */
-const sidebar = document.getElementById("sidebar");
-const trigger = document.getElementById("sidebarTrigger");
-
-trigger.addEventListener("mouseenter", () => {
-    sidebar.classList.add("active");
-    document.body.classList.add("sidebar-open");
-});
-
-sidebar.addEventListener("mouseleave", () => {
-    sidebar.classList.remove("active");
-    document.body.classList.remove("sidebar-open");
-});
-
-/* NAV */
-function showHome() {
-    document.getElementById("homePage").style.display = "block";
-    document.getElementById("queuePage").style.display = "none";
-    document.getElementById("playlistPage").style.display = "none";
-}
-
-function showQueue() {
-    document.getElementById("homePage").style.display = "none";
-    document.getElementById("queuePage").style.display = "block";
-    document.getElementById("playlistPage").style.display = "none";
-}
-
-/* SEARCH */
-searchForm.addEventListener("submit", e => {
-    e.preventDefault();
-    searchMusic();
-});
-
-searchInput.addEventListener("input", () => {
-    let q = searchInput.value.trim();
-
-    if (!q) {
-        results.innerHTML = "";
-        return;
-    }
-
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        searchMusic();
-    }, 600);
-});
-
-/* CLOSE SUGGESTIONS WHEN CLICK OUTSIDE */
-document.addEventListener("click", function(e) {
-    if (!e.target.closest(".search-container")) {
-        results.innerHTML = "";
-    }
-});
-
-function searchMusic() {
-    let query = searchInput.value.trim().toLowerCase();
-
-    if (!query || query.length < 2) return;
-
-    // 🔥 USE CACHE FIRST
-    if (searchCache[query]) {
-        showResults(searchCache[query]);
-        return;
-    }
-
-    fetch("/search", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ query })
-    })
-    .then(res => res.json())
-    .then(data => {
-
-        // 🔥 SAVE TO CACHE (memory)
-        searchCache[query] = data;
-
-        // 🔥 SAVE TO localStorage (persistent)
-        localStorage.setItem("searchCache", JSON.stringify(searchCache));
-
-        showResults(data);
-    })
-        .catch(() => {
-        console.log("API failed, using fallback");
-
-        if (searchCache[query]) {
-            showResults(searchCache[query]);
-        }
-    });
-}
-
-function showResults(data) {
-    results.innerHTML = "";
-
-    data.forEach(item => {
-        let div = document.createElement("div");
-        div.className = "result-item";
-
-        div.innerHTML = `
-            <img src="${item.thumbnail}">
-            <div>
-                <div>${item.title}</div>
-                <small>${item.artist}</small>
-            </div>
-        `;
-
-        div.onclick = () => addToQueue(item);
-        results.appendChild(div);
-    });
-}
-
-/* RECOMMEND */
-function loadRecommendations() {
-    let queries = ["chill", "lofi", "pop", "romantic", "gaming"];
-
-    let container = document.getElementById("recommendList");
-    container.innerHTML = "";
-
-    queries.forEach(q => {
-        fetch("/search", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ query: q + " music" })
-        })
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(item => {
-                let div = document.createElement("div");
-                div.className = "recommend-item";
-
-                div.innerHTML = `
-                    <img src="${item.thumbnail}">
-                    <div>
-                        <div>${item.title}</div>
-                        <small>${item.artist}</small>
-                    </div>
-                `;
-
-                div.onclick = () => addToQueue(item);
-                container.appendChild(div);
-            });
-        });
-    });
-}
-
-/* QUEUE */
-function addToQueue(item) {
-    queue.push(item);
-
-    // Always correct index
-    currentIndex = queue.length - 1;
-
-    playAudio(queue[currentIndex].audio);
-    updateQueueUI();
-}
-
-function updateQueueUI() {
-    queueList.innerHTML = "";
-
-    queue.forEach((item, index) => {
-        let div = document.createElement("div");
-        div.className = "queue-item";
-        div.draggable = true;
-
-        div.innerHTML = `
-        <div class="queue-left">
-            <img src="${item.thumbnail}">
-            <div>
-                <div>${item.title}</div>
-                <small>${item.artist}</small>
-            </div>
-        </div>
-
-        <div class="queue-menu">
-            ⋮
-            <div class="menu-dropdown">
-                <div onclick="removeFromQueue(${index}); event.stopPropagation()">Remove</div>
-                <div onclick="addSongToPlaylist(${index}); event.stopPropagation()">Add to Playlist</div>
-            </div>
-        </div>
-        `;
-
-        div.onclick = () => {
-            currentIndex = index;
-            playAudio(item.audio);
-            updateQueueUI();
-        };
-
-        if (index === currentIndex) {
-            div.style.background = "rgba(29,185,84,0.15)";
-            div.style.border = "1px solid rgba(29,185,84,0.3)";
-        }
-
-        queueList.appendChild(div);
-    });
-}
-
-/* PLAYLIST */
-function createPlaylist() {
-    let name = prompt("Playlist name:");
-    if (!name) return;
-    playlists[name] = [];
-    savePlaylists();
-    renderPlaylists();
-}
-
-function renderPlaylists() {
-    document.getElementById("playlistList").innerHTML = "";
-
-    Object.keys(playlists).forEach(name => {
-        let div = document.createElement("div");
-        div.innerText = name;
-        div.onclick = () => openPlaylist(name);
-        document.getElementById("playlistList").appendChild(div);
-    });
-}
-
-function openPlaylist(name) {
-    document.getElementById("homePage").style.display = "none";
-    document.getElementById("queuePage").style.display = "none";
-    document.getElementById("playlistPage").style.display = "block";
-
-    document.getElementById("playlistTitle").innerText = name;
-    let container = document.getElementById("playlistSongs");
-    container.innerHTML = "";
-
-    playlists[name].forEach(song => {
-        let div = document.createElement("div");
-        div.className = "queue-item";
-
-        div.innerHTML = `
-            <img src="${song.thumbnail}">
-            <div>
-                <div>${song.title}</div>
-                <small>${song.artist}</small>
-            </div>
-        `;
-
-        div.onclick = () => playAudio(song.audio);
-        container.appendChild(div);
-    });
-}
-
-function savePlaylists() {
-    localStorage.setItem("playlists", JSON.stringify(playlists));
-}
-
-/* PLAYER */
-function playAudio(url) {
-    audio.src = url;
-    console.log("Audio URL:", url);
-    audio.muted = false;
-    audio.volume = 1;
-    audio.play();
-
-    if (!window.eqRunning) {
-        animateEqualizer();
-        window.eqRunning = true;
-    }
-
-    let song = queue[currentIndex];
-    if (song) saveRecentlyPlayed(song);
-
-    document.getElementById("nowPlaying").innerText = song?.title || "No song";
-    document.getElementById("artistName").innerText = song?.artist || "";
-    document.getElementById("playerThumbnail").src = song?.thumbnail || "";
-
-    document.getElementById("playBtn").innerText = "⏸";
-
-    // FULLSCREEN SYNC
-    document.getElementById("fsThumbnail").src = song?.thumbnail || "";
-    document.getElementById("fsTitle").innerText = song?.title || "";
-    document.getElementById("fsArtist").innerText = song?.artist || "";
-
-    getDominantColor(song?.thumbnail, (color) => {
-
-        let rgb = color.match(/\d+/g);
-        let r = parseInt(rgb[0]);
-        let g = parseInt(rgb[1]);
-        let b = parseInt(rgb[2]);
-
-        // 🎨 Convert to pastel (soft color)
-        let pastelR = Math.floor((r + 255) / 2);
-        let pastelG = Math.floor((g + 255) / 2);
-        let pastelB = Math.floor((b + 255) / 2);
-
-        let pastelSoft = `rgba(${pastelR},${pastelG},${pastelB},0.35)`;
-        let pastelStrong = `rgba(${pastelR},${pastelG},${pastelB},0.6)`;
-
-        // 🎵 PLAYER BAR (FINAL FIX)
-        const playerBar = document.querySelector(".player-bar");
-
-        playerBar.style.background = `
-            linear-gradient(
-                90deg,
-                ${pastelSoft},
-                rgba(255,255,255,0.05)
-            )
-        `;
-
-        playerBar.style.boxShadow = `
-            0 -6px 30px ${pastelSoft},
-            0 -2px 10px rgba(255,255,255,0.05)
-        `;
-
-        // 🌌 GLOBAL BACKGROUND (FIXED — now defined)
-        let c1 = `rgba(${r},${g},${b},0.35)`;
-        let c2 = `rgba(${Math.min(255,r+60)},${Math.min(255,g+40)},${Math.min(255,b+60)},0.25)`;
-        let c3 = `rgba(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)},0.4)`;
-
-        appBg.style.background = `
-            radial-gradient(circle at 20% 20%, ${c1}, transparent 40%),
-            radial-gradient(circle at 80% 30%, ${c2}, transparent 50%),
-            radial-gradient(circle at 50% 80%, ${c3}, transparent 60%),
-            radial-gradient(circle at center, #000 70%)
-        `;
-
-        // 🎧 FULLSCREEN BG
-        fsBg.style.background = `
-            radial-gradient(circle at top, ${c2}, #000 75%)
-        `;
-    });
-}    
-
-function togglePlay() {
-    let btn = document.getElementById("playBtn");
-    let eq = document.querySelector(".equalizer");
-    btn.style.transform = "scale(0.9)";
-    setTimeout(() => btn.style.transform = "scale(1)", 100);
-
-    if (audio.paused) {
-        audio.play();
-
-        btn.innerText = "⏸";
-        document.getElementById("fsPlayBtn").innerText = "⏸";
-
-        eq.style.opacity = "1";
-
-    } else {
-        audio.pause();
-
-        btn.innerText = "▶";
-        document.getElementById("fsPlayBtn").innerText = "▶";
-
-        eq.style.opacity = "0.3";
-    }
-    if (!audio.paused) {
-        btn.classList.add("playing");
-    } else {
-        btn.classList.remove("playing");
-    }
-}
-
-function playNext() {
-    if (!queue.length) return;
-
-    currentIndex = (currentIndex + 1) % queue.length;
-    playAudio(queue[currentIndex].audio);
-}
-
-function playPrevious() {
-    currentIndex = (currentIndex - 1 + queue.length) % queue.length;
-    playAudio(queue[currentIndex].audio);
-}
-
-function toggleShuffle() {
-    isShuffle = !isShuffle;
-    document.getElementById("shuffleBtn").classList.toggle("active");
-}
-
-function toggleRepeat() {
-    isRepeat = !isRepeat;
-    document.getElementById("repeatBtn").classList.toggle("active");
-}
-
-function setVolume(val) {
-    audio.volume = val;
-
-    let icon = document.getElementById("volumeIcon");
-
-    if (val == 0) icon.innerText = "🔇";
-    else if (val < 0.5) icon.innerText = "🔉";
-    else icon.innerText = "🔊";
-}
 
 /* PROGRESS */
-/* PROGRESS */
-audio.addEventListener("timeupdate", () => {
+if (audio) {
+    audio.addEventListener("timeupdate", () => {
+
     if (!audio.duration) return;
 
-    // MAIN PLAYER
-    document.getElementById("progressBar").value =
-        (audio.currentTime / audio.duration) * 100;
+    // MAIN PLAYER ELEMENTS
+    const progressBar = document.getElementById("progressBar");
+    const currentTimeText = document.getElementById("currentTime");
+    const durationText = document.getElementById("durationText");
 
-    document.getElementById("currentTime").innerText = formatTime(audio.currentTime);
-    document.getElementById("durationText").innerText = formatTime(audio.duration);
+    // FULLSCREEN ELEMENTS
+    const fsProgress = document.getElementById("fsProgress");
+    const fsCurrent = document.getElementById("fsCurrent");
+    const fsDuration = document.getElementById("fsDuration");
+
+    // MAIN PLAYER
+    if (progressBar) {
+        progressBar.value =
+            (audio.currentTime / audio.duration) * 100;
+    }
+
+    if (currentTimeText) {
+        currentTimeText.innerText =
+            formatTime(audio.currentTime);
+    }
+
+    if (durationText) {
+        durationText.innerText =
+            formatTime(audio.duration);
+    }
 
     // FULLSCREEN PLAYER
-    document.getElementById("fsProgress").value =
-        (audio.currentTime / audio.duration) * 100;
-
-    document.getElementById("fsCurrent").innerText = formatTime(audio.currentTime);
-    document.getElementById("fsDuration").innerText = formatTime(audio.duration);
-});
-
-audio.addEventListener("ended", playNext);
-
-function seekAudio(val) {
-    audio.currentTime = (val / 100) * audio.duration;
-}
-
-function formatTime(sec) {
-    let m = Math.floor(sec / 60);
-    let s = Math.floor(sec % 60);
-    return `${m}:${s < 10 ? "0" : ""}${s}`;
-}
-
-function removeFromQueue(index) {
-    queue.splice(index, 1);
-    if (index <= currentIndex) currentIndex--;
-    updateQueueUI();
-}
-
-function addSongToPlaylist(index) {
-    let name = prompt("Playlist name:");
-    if (playlists[name]) {
-        playlists[name].push(queue[index]);
-        savePlaylists();
+    if (fsProgress) {
+        fsProgress.value =
+            (audio.currentTime / audio.duration) * 100;
     }
+
+    if (fsCurrent) {
+        fsCurrent.innerText =
+            formatTime(audio.currentTime);
+    }
+
+    if (fsDuration) {
+        fsDuration.innerText =
+            formatTime(audio.duration);
+    }
+});
 }
 
+
+/* AUTO NEXT */
+if (audio && typeof playNext === "function") {
+
+    audio.addEventListener("ended", playNext);
+}
+
+
+/* DOMINANT COLOR */
 function getDominantColor(imgUrl, callback) {
+
     let img = new Image();
+
     img.crossOrigin = "Anonymous";
 
     img.onload = function () {
+
         let canvas = document.getElementById("colorCanvas");
+
+        if (!canvas) return;
+
         let ctx = canvas.getContext("2d");
 
         canvas.width = img.width;
@@ -514,15 +187,24 @@ function getDominantColor(imgUrl, callback) {
 
         ctx.drawImage(img, 0, 0);
 
-        let data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let data = ctx.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        ).data;
 
-        let r = 0, g = 0, b = 0;
+        let r = 0;
+        let g = 0;
+        let b = 0;
         let count = 0;
 
         for (let i = 0; i < data.length; i += 40) {
+
             r += data[i];
             g += data[i + 1];
             b += data[i + 2];
+
             count++;
         }
 
@@ -530,61 +212,94 @@ function getDominantColor(imgUrl, callback) {
         g = Math.floor(g / count);
         b = Math.floor(b / count);
 
-        callback(`rgb(${r},${g},${b})`);
+        if (callback) {
+            callback(`rgb(${r},${g},${b})`);
+        }
     };
 
     img.src = imgUrl;
 }
 
+
+/* EQUALIZER */
 function animateEqualizer() {
+
     let bars = document.querySelectorAll(".equalizer span");
 
-    bars.forEach((bar, i) => {
-        let base = Math.sin(Date.now() / 200 + i) * 0.5 + 0.5;
-        let height = 6 + base * 18;
+    if (!bars.length) return;
 
-        bar.style.height = height + "px";
-    });
+    if (!audio.paused) {
+
+        bars.forEach((bar, i) => {
+
+            let base =
+                Math.sin(Date.now() / 200 + i) * 0.5 + 0.5;
+
+            let height = 6 + base * 18;
+
+            bar.style.height = height + "px";
+        });
+    }
 
     requestAnimationFrame(animateEqualizer);
 }
 
+
+/* RECENTLY PLAYED */
 function saveRecentlyPlayed(song) {
 
-    // Use album image as album ID (fallback)
     let albumId = song.thumbnail;
 
-    // Remove existing same album
-    recentlyPlayed = recentlyPlayed.filter(s => s.thumbnail !== albumId);
+    // REMOVE DUPLICATE
+    recentlyPlayed =
+        recentlyPlayed.filter(
+            s => s.thumbnail !== albumId
+        );
 
-    // Add to top
+    // ADD TOP
     recentlyPlayed.unshift(song);
 
-    // Limit albums
+    // LIMIT
     if (recentlyPlayed.length > 10) {
+
         recentlyPlayed.pop();
     }
 
-    localStorage.setItem("recentlyPlayed", JSON.stringify(recentlyPlayed));
+    localStorage.setItem(
+        "recentlyPlayed",
+        JSON.stringify(recentlyPlayed)
+    );
 
     renderRecentlyPlayed();
 }
 
+
+/* RENDER RECENTS */
 function renderRecentlyPlayed() {
-    let container = document.getElementById("recentAlbums");
+
+    let container =
+        document.getElementById("recentAlbums");
 
     if (!container) return;
 
     container.innerHTML = "";
 
     recentlyPlayed.forEach(song => {
+
         let div = document.createElement("div");
+
         div.className = "album-card";
 
         div.innerHTML = `
             <img src="${song.thumbnail}">
-            <div class="album-title">${song.title}</div>
-            <div class="album-artist">${song.artist}</div>
+
+            <div class="album-title">
+                ${song.title}
+            </div>
+
+            <div class="album-artist">
+                ${song.artist}
+            </div>
         `;
 
         div.onclick = () => addToQueue(song);
@@ -593,61 +308,31 @@ function renderRecentlyPlayed() {
     });
 }
 
-// FULLSCREEN PLAYER
-const expandBtn = document.getElementById("expandBtn");
-const expandPath = document.getElementById("expandPath");
-
-
-expandBtn.onclick = () => {
-
-    fsPlayer.classList.toggle("hidden");
-
-    if (fsPlayer.classList.contains("hidden")) {
-
-        // EXPAND ICON
-        expandPath.setAttribute("d",
-            "M3 3h6v2H5v4H3V3zm16 0v6h-2V5h-4V3h6zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"
-        );
-
-    } else {
-
-        // COLLAPSE ICON
-        expandPath.setAttribute("d",
-            "M9 9H3v2h4v4h2V9zm12 0h-6v6h2v-4h4V9zM9 15H3v2h6v-6H7v4zm12 2v-2h-4v-4h-2v6h6z"
-        );
-    }
-    document.getElementById("fsPlayBtn").innerText = 
-        audio.paused ? "▶" : "⏸";
-};
-document.getElementById("closeFS").onclick = () => {
-    fsPlayer.classList.add("hidden");
-
-    // 🔥 RESET ICON
-    expandPath.setAttribute("d",
-        "M3 3h6v2H5v4H3V3zm16 0v6h-2V5h-4V3h6zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"
-    );
-};
-// FULLSCREEN SEEK
-document.getElementById("fsProgress").addEventListener("input", (e) => {
-    audio.currentTime = (e.target.value / 100) * audio.duration;
-});
 
 /* INIT */
-window.onload = () => {
+window.addEventListener("load", () => {
 
     loadRecommendations();
+
     renderPlaylists();
+
     renderRecentlyPlayed();
+
+    animateEqualizer();
 
     // LOADER
     setTimeout(() => {
 
-        document
-        .getElementById("loader")
-        .classList.add("hide");
+        const loader =
+            document.getElementById("loader");
+
+        if (loader) {
+
+            loader.classList.add("hide");
+        }
 
     }, 1800);
-};
+});
 </script>
 
 </body>
