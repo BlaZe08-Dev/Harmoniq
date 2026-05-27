@@ -1,3 +1,5 @@
+const queueList = document.getElementById("queueList");
+
 /* QUEUE */
 function addToQueue(item) {
     queue.push(item);

@@ -1,3 +1,30 @@
+/* MOBILE HOME LAYOUT */
+@media (max-width: 768px) {
+
+    .home-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        width: 100%;
+    }
+
+    .home-left,
+    .home-right {
+
+        width: 100% !important;
+
+        max-width: 100%;
+
+        flex: none;
+    }
+
+    .home-right {
+
+        margin-top: 10px;
+    }
+}
+
 /* MOBILE UI */
 
 @media screen and (max-width: 768px){
@@ -75,18 +102,6 @@
         font-size: 15px;
     }
 
-    /* HOME LAYOUT */
-    .home-layout{
-        display: flex;
-        flex-direction: column;
-
-        gap: 20px;
-    }
-
-    .home-left,
-    .home-right{
-        width: 100%;
-    }
 
     /* RECOMMENDATION TEXT */
     .recommend-item div div{
@@ -184,9 +199,16 @@
 
     /* LOADER */
     .loader-title{
-        font-size: 22px;
+        
+        font-size: 20px;
 
-        letter-spacing: 8px;
+        letter-spacing: 5px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        white-space: nowrap;
     }
 }
 .mobile-topbar {

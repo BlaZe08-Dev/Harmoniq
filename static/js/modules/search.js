@@ -1,3 +1,8 @@
+const searchInput = document.getElementById("searchInput");
+const searchCache = JSON.parse(localStorage.getItem("searchCache")) || {};
+const results = document.getElementById("results");
+const searchForm = document.getElementById("searchForm");
+
 /* SEARCH */
 searchForm.addEventListener("submit", e => {
     e.preventDefault();

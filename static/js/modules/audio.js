@@ -1,3 +1,5 @@
+const audio = document.getElementById("audioPlayer");
+
 /* PLAYER */
 function playAudio(url) {
     audio.src = url;

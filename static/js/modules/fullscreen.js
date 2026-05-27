@@ -1,7 +1,9 @@
+const fsPlayer = document.getElementById("fullscreenPlayer");
+const fsBg = document.getElementById("fsBg");
+
 // FULLSCREEN PLAYER
 const expandBtn = document.getElementById("expandBtn");
 const expandPath = document.getElementById("expandPath");
-
 if (expandBtn && fsPlayer) {
 
     expandBtn.onclick = () => {
