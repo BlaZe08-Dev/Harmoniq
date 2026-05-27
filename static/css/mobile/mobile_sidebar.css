@@ -33,9 +33,11 @@
         transition: 0.3s ease;
 
         z-index: 1500;
+        display: none;
     }
 
     .mobile-overlay.active {
+        display: block;
         opacity: 1;
         pointer-events: auto;
     }

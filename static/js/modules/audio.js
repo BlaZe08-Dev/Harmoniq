@@ -7,6 +7,16 @@ function playAudio(url) {
     audio.muted = false;
     audio.volume = 1;
     audio.play();
+    /* SHOW MOBILE MINI PLAYER */
+    if (window.innerWidth <= 768) {
+        
+        const playerBar = document.querySelector(".player-bar");
+        
+        if (playerBar) {
+            playerBar.style.display = "flex";
+        }
+    }
+
     const ambient = document.getElementById("musicAmbient");
 
     ambient.classList.add("active");
