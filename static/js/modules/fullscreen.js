@@ -31,11 +31,37 @@ if (expandBtn && fsPlayer) {
             }
         }
 
-        document.getElementById("fsPlayBtn").innerText =
-            audio.paused ? "▶" : "⏸";
+        const fsPlayBtn = document.getElementById("fsPlayBtn");
+        
+        if(fsPlayBtn){
+            fsPlayBtn.innerText = audio.paused ? "▶" : "⏸";
+        }
     };
 }
+audio.addEventListener("play",()=>{
 
+    const btn =
+        document.getElementById("fsPlayBtn");
+
+    if(btn){
+
+        btn.innerText = "⏸";
+    }
+
+});
+
+
+audio.addEventListener("pause",()=>{
+
+    const btn =
+        document.getElementById("fsPlayBtn");
+
+    if(btn){
+
+        btn.innerText = "▶";
+    }
+
+});
 const closeFS = document.getElementById("closeFS");
 
 if (closeFS) {

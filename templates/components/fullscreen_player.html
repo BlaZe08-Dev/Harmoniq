@@ -1,28 +1,180 @@
 <!-- FULLSCREEN PLAYER -->
 <div id="fullscreenPlayer" class="fullscreen-player hidden">
+
     <canvas id="colorCanvas" style="display:none;"></canvas>
+
     <div class="fs-bg" id="fsBg"></div>
+
 
     <div class="fs-content">
 
-        <img id="fsThumbnail" src="">
+        <!-- TOP BAR -->
 
-        <h2 id="fsTitle">Title</h2>
-        <p id="fsArtist">Artist</p>
+        <div class="fs-topbar">
 
-        <div class="fs-controls">
-            <button onclick="playPrevious()">⏮</button>
-            <button id="fsPlayBtn" onclick="togglePlay()">▶</button>
-            <button onclick="playNext()">⏭</button>
+            <button id="closeFS">
+                ⌄
+            </button>
+
         </div>
 
-        <div class="fs-progress">
-            <span id="fsCurrent">0:00</span>
-            <input type="range" id="fsProgress" min="0" max="100">
-            <span id="fsDuration">0:00</span>
+
+
+        <!-- ARTWORK -->
+
+        <div class="fs-artwork-section">
+
+            <div class="fs-artwork-wrapper">
+
+                <img id="fsThumbnail" src="">
+
+
+                <!-- FAVORITE -->
+
+                <button class="fs-favorite-btn">
+
+                    ♡
+
+                </button>
+
+
+
+                <!-- MORE -->
+
+                <button class="fs-more-btn">
+
+                    ⋮
+
+                </button>
+
+            </div>
+
         </div>
 
-        <button id="closeFS">⬇ Close</button>
+
+
+        <!-- SONG INFO -->
+
+        <div class="fs-song-info">
+
+            <h2 id="fsTitle">
+
+                Title
+
+            </h2>
+
+
+            <p id="fsArtist">
+
+                Artist
+
+            </p>
+
+        </div>
+
+
+
+        <!-- EXTRA CONTROLS -->
+
+        <div class="fs-extra-controls">
+
+
+            <div class="left-controls">
+
+                <button class="fs-small-btn">
+
+                    EQ
+
+                </button>
+
+
+                <button class="fs-small-btn">
+
+                    ⏱
+
+                </button>
+
+            </div>
+
+
+
+            <div class="right-controls">
+
+
+                <button class="fs-small-btn">
+
+                    🔁
+
+                </button>
+
+
+                <button class="fs-small-btn">
+
+                    🔀
+
+                </button>
+
+
+            </div>
+
+        </div>
 
     </div>
+            <!-- WAVEFORMS -->
+
+        <div class="fs-progress-section">
+
+
+            <div id="waveformContainer"></div>
+
+
+            <div class="wave-atmosphere"></div>
+
+            <!-- MAIN CONTROLS -->
+
+            <div class="fs-controls">
+
+
+                <button onclick="playPrevious()">
+                    ⏮
+                </button>
+
+
+
+                <button id="fsPlayBtn"
+                        onclick="togglePlay()">
+                        ▶
+                </button>
+
+
+
+                <button onclick="playNext()">
+                    ⏭
+                </button>
+            </div>
+
+
+            <div class="fs-progress">
+
+
+                <span id="fsCurrent">
+
+                    0:00
+
+                </span>
+
+
+
+                <span id="fsDuration">
+
+                    0:00
+
+                </span>
+
+
+            </div>
+
+
+        </div>
+
 </div>

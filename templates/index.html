@@ -27,22 +27,14 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile/main_mobile.css') }}">
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile/mobile_playerbar.css') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile/mobile_sidebar.css') }}">
 
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/727/727245.png">
 </head>
 
 <body>
-    <div class="mobile-topbar">
-        <button class="menu-btn" id="mobileMenuBtn">
-            ☰
-        </button>
-        
-        <div class="mobile-logo">
-            HARMONIQ
-        </div>
-    </div>
-    
     <div class="mobile-overlay" id="mobileOverlay"></div>
 
 {% include 'components/loader.html' %}
@@ -88,7 +80,11 @@
 
 {% include 'components/fullscreen_player.html' %}
 
+<script src="https://pixijs.download/release/pixi.min.js"></script>
+
 <script src="{{ url_for('static', filename='js/modules/audio.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/mobile_player.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/modules/navigation.js') }}"></script>
 
@@ -187,7 +183,7 @@ function getDominantColor(imgUrl, callback) {
 
         if (!canvas) return;
 
-        let ctx = canvas.getContext("2d");
+        let ctx = canvas.getContext("2d", { willReadFrequently: true });
 
         canvas.width = img.width;
         canvas.height = img.height;

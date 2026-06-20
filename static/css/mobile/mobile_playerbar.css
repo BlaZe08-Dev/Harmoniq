@@ -1,0 +1,498 @@
+/* HARMONIQ MOBILE PLAYER SYSTEM */
+
+@media screen and (max-width: 768px){
+
+    /* HIDE DESKTOP PLAYER */
+
+    .desktop-player{
+        display: none !important;
+    }
+
+    /* COMMON HIDDEN STATE */
+
+    .hidden-player{
+
+        opacity: 0;
+
+        visibility: hidden;
+
+        pointer-events: none;
+
+        transform:
+            translateY(40px)
+            scale(0.78);
+
+        filter: blur(10px);
+    }
+
+    /* PLAYER MORPH STATES */
+
+    .player-morphing{
+
+        pointer-events: none;
+    }
+
+
+    /* EXPANDED EXIT */
+
+    .expanded-exit{
+
+        opacity: 0;
+
+        transform:
+            translateY(30px)
+            scale(0.82);
+
+        filter: blur(8px);
+    }
+
+
+    /* COMPACT ENTER */
+
+    .compact-enter{
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+        filter: blur(0px);
+    }
+
+    /* EXPANDED PLAYER */
+
+    .mobile-expanded-player{
+
+        position: fixed;
+
+        left: 12px;
+        right: 12px;
+        bottom: 14px;
+
+        height: 74px;
+
+        display: flex;
+        visibility: visible;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 14px;
+
+        border-radius: 24px;
+
+        background: rgba(18,18,18,0.82);
+
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+
+        border: 1px solid rgba(255,255,255,0.06);
+
+        box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+
+        z-index: 5000;
+
+        overflow: hidden;
+
+        transition:
+        
+            opacity 0.45s cubic-bezier(0.22,1,0.36,1), 
+        
+            transform 0.55s cubic-bezier(0.22,1,0.36,1),
+        
+            filter 0.45s ease,
+        
+            visibility 0.45s;
+    }
+
+    /* LEFT SIDE */
+
+    .mobile-player-left{
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        min-width: 0;
+
+        position: relative;
+        z-index: 2;
+    }
+
+    /* DISC WRAPPER */
+
+    .mobile-disc-wrapper{
+
+        width: 52px;
+        height: 52px;
+
+        border-radius: 50%;
+
+        overflow: hidden;
+
+        flex-shrink: 0;
+
+        position: relative;
+    }
+
+    /* DISC IMAGE */
+
+    .mobile-disc{
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        border-radius: 50%;
+
+        animation: harmonicSpin 8s linear infinite;
+
+        animation-play-state: paused;
+    }
+
+    /* SONG INFO */
+
+    .mobile-song-info{
+
+        display: flex;
+
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+    #mobileNowPlaying{
+
+        font-size: 14px;
+        font-weight: 600;
+
+        color: white;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #mobileArtistName{
+
+        font-size: 12px;
+
+        color: rgba(255,255,255,0.65);
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* WAVE PROGRESS */
+
+    .mobile-wave-progress{
+
+        position: absolute;
+
+        inset: 0;
+
+        overflow: hidden;
+
+        pointer-events: none;
+
+        opacity: 0.20;
+    }
+
+    .wave-progress-fill{
+
+        position: absolute;
+
+        left: 0;
+        top: 0;
+
+        height: 100%;
+        width: 0%;
+
+        border-radius: inherit;
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(255,255,255,0.12),
+                rgba(255,255,255,0.32)
+            );
+
+        transition: width 0.12s linear;
+
+        overflow: hidden;
+
+        box-shadow: 0 0 8px rgba(255,255,255,0.12), 0 0 18px rgba(255,255,255,0.08);
+        
+        animation: wavePulse 2.4s ease-in-out infinite;
+    }
+
+    /* WAVE SHIMMER */
+
+    .wave-progress-fill::after{
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.25),
+                transparent
+            );
+
+        animation:
+            waveShimmer 2.2s linear infinite;
+    }
+
+
+    @keyframes waveShimmer{
+
+        from{
+
+            transform: translateX(-100%);
+        }
+
+        to{
+
+            transform: translateX(100%);
+        }
+    }
+
+    @keyframes wavePulse{
+
+        0%{
+
+            opacity: 0.72;
+        }
+
+        50%{
+
+            opacity: 1;
+        }
+
+        100%{
+
+            opacity: 0.72;
+        }
+    }
+
+    /* CONTROLS */
+
+    .mobile-player-controls{
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 0;
+
+        position: relative;
+        z-index: 2;
+    }
+    #mobilePrevBtn{ margin-right: 10px;}
+
+    #mobilePlayBtn{margin-right: 10px;}
+
+
+    /* NEXT BUTTON WRAPPER */
+
+    .next-btn-wrapper{
+
+        width: 42px;
+
+        overflow: hidden;
+
+        transition:
+
+            width 0.42s cubic-bezier(0.22,1,0.36,1),
+
+            opacity 0.35s ease,
+
+            transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+
+
+    /* BUTTON */
+
+    #mobileNextBtn{
+
+        width: 42px;
+    }
+
+
+    /* HIDDEN STATE */
+
+    .next-hidden{
+
+        width: 0;
+
+        opacity: 0;
+
+        transform: translateX(30px);
+
+        pointer-events: none;
+    }
+
+
+    .mobile-player-controls button{
+
+        background: transparent;
+        border: none;
+
+        color: white;
+
+        font-size: 18px;
+
+        cursor: pointer;
+    }
+
+    #mobilePlayBtn{
+
+        width: 42px;
+        height: 42px;
+
+        border-radius: 50%;
+
+        background: white;
+
+        color: black;
+
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* COMPACT PLAYER */
+
+    .mobile-compact-player{
+
+        position: fixed;
+
+        left: 50%;
+        bottom: 18px;
+
+        width: 118px;
+        height: 58px;
+
+        display: flex;
+
+        visibility: visible;
+
+        align-items: center;
+        justify-content: space-between;
+
+        margin-left: -59px;
+
+        padding: 0 12px;
+
+        border-radius: 999px;
+
+        background: rgba(18,18,18,0.82);
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border: 1px solid rgba(255,255,255,0.06);
+
+        z-index: 9999;
+
+        transition:
+
+            opacity 0.45s cubic-bezier(0.22,1,0.36,1),
+
+            transform 0.55s cubic-bezier(0.22,1,0.36,1),
+
+            filter 0.45s ease,
+
+            visibility 0.45s;
+    }
+
+    /* COMPACT DISC WRAPPER */
+
+    .compact-disc-wrapper{
+
+        width: 42px;
+        height: 42px;
+
+        position: relative;
+    }
+
+    .compact-disc{
+
+        width: 100%;
+        height: 100%;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+
+        animation:
+            harmonicSpin 8s linear infinite;
+
+        animation-play-state: paused;
+    }
+
+    /* PROGRESS RING */
+
+    .compact-progress-ring{
+
+        position: absolute;
+
+        inset: -3px;
+
+        border-radius: 50%;
+
+        border:
+            2px solid rgba(255,255,255,0.25);
+    }
+
+    /* COMPACT PLAY BUTTON */
+
+    #compactPlayBtn{
+
+        background: transparent;
+        border: none;
+
+        color: white;
+
+        font-size: 18px;
+
+        cursor: pointer;
+    }
+    #mobilePlayBtn,
+    #compactPlayBtn{
+
+        width: 54px;
+        height: 54px;
+
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 24px;
+
+        line-height: 1;
+    }
+
+    /* DISC ROTATION */
+
+    @keyframes harmonicSpin{
+
+        from{
+            transform: rotate(0deg);
+        }
+
+        to{
+            transform: rotate(360deg);
+        }
+    }
+}
