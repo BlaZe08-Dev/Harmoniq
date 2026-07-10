@@ -1,51 +1,127 @@
 const fsPlayer = document.getElementById("fullscreenPlayer");
 const fsBg = document.getElementById("fsBg");
 
-// FULLSCREEN PLAYER
 const expandBtn = document.getElementById("expandBtn");
 const expandPath = document.getElementById("expandPath");
+
+const fsPlayBtn = document.getElementById("fsPlayBtn");
+const fsPrevBtn = document.getElementById("fsPrevBtn");
+const fsNextBtn = document.getElementById("fsNextBtn");
+const fsEqBtn = document.getElementById("fsEqBtn");
+const fsSleepBtn = document.getElementById("fsSleepBtn");
+const fsRepeatBtn = document.getElementById("fsRepeatBtn");
+const fsShuffleBtn = document.getElementById("fsShuffleBtn");
+const fsFavoriteBtn = document.getElementById("fsFavoriteBtn");
+const fsMoreBtn = document.getElementById("fsMoreBtn");
+
+/* DRAG TO CLOSE */
+
+let isDraggingFS = false;
+
+let dragStartY = 0;
+
+let dragDistance = 0;
+
+let hasStartedDragging = false;
+
+function initializeFullscreenIcons(){
+
+    if(fsPlayBtn)
+        fsPlayBtn.innerHTML = audio.paused ? Icons.play : Icons.pause;
+
+    if(fsPrevBtn)
+        fsPrevBtn.innerHTML = Icons.previous;
+
+    if(fsNextBtn)
+        fsNextBtn.innerHTML = Icons.next;
+
+    if(fsEqBtn)
+        fsEqBtn.innerHTML = Icons.equalizer;
+
+    if(fsSleepBtn)
+        fsSleepBtn.innerHTML = Icons.timer;
+
+    if(fsRepeatBtn)
+        fsRepeatBtn.innerHTML = Icons.repeat;
+
+    if(fsShuffleBtn)
+        fsShuffleBtn.innerHTML = Icons.shuffle;
+
+    if(fsFavoriteBtn)
+        fsFavoriteBtn.innerHTML = Icons.heart;
+
+    if(fsMoreBtn)
+        fsMoreBtn.innerHTML = Icons.more;
+}
+
+initializeFullscreenIcons();
+
+function closeFullscreen(){
+    
+    hasStartedDragging = false;
+    
+    isDraggingFS = false;
+    
+    dragDistance = 0;
+    fsPlayer.style.transform = "";
+
+    fsPlayer.classList.add("hidden");
+
+    if(expandPath){
+
+        expandPath.setAttribute(
+            "d",
+            "M3 3h6v2H5v4H3V3zm16 0v6h-2V5h-4V3h6zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"
+        );
+
+    }
+
+}
+
+function openFullscreen(){
+
+    fsPlayer.classList.remove("hidden");
+
+    fsPlayer.style.transform = "";
+
+    if(expandPath){
+
+        expandPath.setAttribute(
+            "d",
+            "M9 9H3v2h4v4h2V9zm12 0h-6v6h2v-4h4V9zM9 15H3v2h6v-6H7v4zm12 2v-2h-4v-4h-2v6h6z"
+        );
+
+    }
+
+    if(fsPlayBtn){
+
+        fsPlayBtn.innerHTML = audio.paused
+            ? Icons.play
+            : Icons.pause;
+
+    }
+
+}
+
+// FULLSCREEN PLAYER
+
 if (expandBtn && fsPlayer) {
 
     expandBtn.onclick = () => {
 
-        fsPlayer.classList.toggle("hidden");
-
         if (fsPlayer.classList.contains("hidden")) {
-            
-            if (expandPath) {
-                
-                expandPath.setAttribute(
-                    "d",
-                    "M3 3h6v2H5v4H3V3zm16 0v6h-2V5h-4V3h6zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"
-                );
-            }
+            openFullscreen();
 
         } else {
-            
-            if (expandPath) {
-                
-                expandPath.setAttribute(
-                    "d",
-                    "M9 9H3v2h4v4h2V9zm12 0h-6v6h2v-4h4V9zM9 15H3v2h6v-6H7v4zm12 2v-2h-4v-4h-2v6h6z"
-                );
-            }
+            closeFullscreen();
         }
 
-        const fsPlayBtn = document.getElementById("fsPlayBtn");
-        
-        if(fsPlayBtn){
-            fsPlayBtn.innerText = audio.paused ? "▶" : "⏸";
-        }
     };
 }
 audio.addEventListener("play",()=>{
 
-    const btn =
-        document.getElementById("fsPlayBtn");
-
-    if(btn){
-
-        btn.innerText = "⏸";
+    if(fsPlayBtn){
+        fsPlayBtn.innerHTML = Icons.pause;
     }
 
 });
@@ -53,32 +129,10 @@ audio.addEventListener("play",()=>{
 
 audio.addEventListener("pause",()=>{
 
-    const btn =
-        document.getElementById("fsPlayBtn");
-
-    if(btn){
-
-        btn.innerText = "▶";
-    }
+    if(fsPlayBtn){
+        fsPlayBtn.innerHTML = Icons.play;}
 
 });
-const closeFS = document.getElementById("closeFS");
-
-if (closeFS) {
-
-    closeFS.onclick = () => {
-
-        fsPlayer.classList.add("hidden");
-
-        if (expandPath) {
-            
-            expandPath.setAttribute(
-                "d",
-                "M3 3h6v2H5v4H3V3zm16 0v6h-2V5h-4V3h6zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"
-            );
-        }
-    };
-}
 
 // FULLSCREEN SEEK
 const fsProgress = document.getElementById("fsProgress");
@@ -89,4 +143,93 @@ if (fsProgress) {
 
         audio.currentTime = (e.target.value / 100) * audio.duration;
     });
+}
+
+fsPlayer.addEventListener(
+    "touchstart",
+    startTouchDrag,
+    { passive: false }
+);
+
+window.addEventListener(
+    "touchmove",
+    dragTouch,
+    { passive: false }
+);
+
+window.addEventListener(
+    "touchend",
+    endTouchDrag
+);
+
+
+function startTouchDrag(e){
+
+    dragStartY = e.touches[0].clientY;
+
+    dragDistance = 0;
+
+    hasStartedDragging = false;
+
+    fsPlayer.style.transition = "none";
+}
+
+function dragTouch(e){
+
+    if(!e.touches.length) return;
+    
+    dragDistance = e.touches[0].clientY - dragStartY;
+
+    if(dragDistance < 0){
+        dragDistance = 0;
+    }
+
+    if(!hasStartedDragging){
+
+        if(dragDistance < 10){
+            return;
+        }
+
+        hasStartedDragging = true;
+
+        isDraggingFS = true;
+    }
+
+    e.preventDefault();
+
+    fsPlayer.style.transform =
+        `translateY(${dragDistance}px)`;
+}
+
+function endTouchDrag(){
+
+    // It was just a tap, not a drag
+    if(!hasStartedDragging){
+        return;
+    }
+
+    isDraggingFS = false;
+
+    hasStartedDragging = false;
+
+    fsPlayer.style.transition = "transform .25s ease";
+
+    if(dragDistance > 120){
+
+        closeFullscreen();
+
+    }else{
+
+        fsPlayer.style.transform = "translateY(0px)";
+
+    }
+
+    dragDistance = 0;
+
+    setTimeout(()=>{
+
+        fsPlayer.style.transition = "";
+
+    },250);
+
 }

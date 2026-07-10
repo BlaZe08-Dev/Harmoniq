@@ -10,14 +10,6 @@
 
         <!-- TOP BAR -->
 
-        <div class="fs-topbar">
-
-            <button id="closeFS">
-                ⌄
-            </button>
-
-        </div>
-
 
 
         <!-- ARTWORK -->
@@ -31,21 +23,11 @@
 
                 <!-- FAVORITE -->
 
-                <button class="fs-favorite-btn">
-
-                    ♡
-
-                </button>
-
-
+                <button id="fsFavoriteBtn" class="fs-favorite-btn"></button>
 
                 <!-- MORE -->
 
-                <button class="fs-more-btn">
-
-                    ⋮
-
-                </button>
+                <button id="fsMoreBtn" class="fs-more-btn"></button>
 
             </div>
 
@@ -81,18 +63,9 @@
 
             <div class="left-controls">
 
-                <button class="fs-small-btn">
-
-                    EQ
-
-                </button>
-
-
-                <button class="fs-small-btn">
-
-                    ⏱
-
-                </button>
+                <button id="fsEqBtn" class="fs-small-btn"></button>
+                
+                <button id="fsSleepBtn" class="fs-small-btn"></button>
 
             </div>
 
@@ -100,20 +73,9 @@
 
             <div class="right-controls">
 
+                <button id="fsRepeatBtn" class="fs-small-btn"></button>
 
-                <button class="fs-small-btn">
-
-                    🔁
-
-                </button>
-
-
-                <button class="fs-small-btn">
-
-                    🔀
-
-                </button>
-
+                <button id="fsShuffleBtn" class="fs-small-btn"></button>
 
             </div>
 
@@ -135,22 +97,12 @@
             <div class="fs-controls">
 
 
-                <button onclick="playPrevious()">
-                    ⏮
-                </button>
-
-
-
-                <button id="fsPlayBtn"
-                        onclick="togglePlay()">
-                        ▶
-                </button>
-
-
-
-                <button onclick="playNext()">
-                    ⏭
-                </button>
+                <button id="fsPrevBtn" onclick="playPrevious()"> </button>
+                
+                <button id="fsPlayBtn" onclick="togglePlay()"></button>
+                
+                <button id="fsNextBtn" onclick="playNext()"></button>
+            
             </div>
 
 

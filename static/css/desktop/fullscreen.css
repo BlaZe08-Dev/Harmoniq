@@ -61,7 +61,9 @@
     --side-icon:34px;
     /* FAVOURTIE BUTTON */
 
-    --floating-offset:18px;
+    --artwork-button-offset:18px;
+    --floating-btn-size: 38px;
+    --floating-icon-size: 22px;
 
     /* Timer */
 
@@ -110,6 +112,7 @@
     overflow-y: auto;
 
     overscroll-behavior: none;
+
 }
 
 .fullscreen-player.hidden {
@@ -195,35 +198,6 @@
 
 /* TOPBAR */
 
-.fs-topbar {
-
-    width: 100%;
-
-    display: flex;
-
-    justify-content: center;
-}
-
-#closeFS {
-
-    width: 44px;
-    height: 44px;
-
-    border-radius: 50%;
-
-    border: none;
-
-    background:
-        rgba(255,255,255,0.08);
-
-    color: white;
-
-    font-size: 26px;
-
-    cursor: pointer;
-
-    backdrop-filter: blur(10px);
-}
 
 
 /* ARTWORK SECTION */
@@ -312,6 +286,9 @@
 .fs-favorite-btn,
 .fs-more-btn {
 
+    width: var(--floating-btn-size);
+    height: var(--floating-btn-size);
+    
     position: absolute;
 
     background: transparent;
@@ -321,8 +298,6 @@
     padding: 0;
 
     color: white;
-
-    font-size: 30px;
 
     cursor: pointer;
 
@@ -351,9 +326,9 @@
 
 .fs-favorite-btn {
 
-    left: var(--floating-offset);
+    left: var(--artwork-button-offset);
 
-    bottom: var(--floating-offset);
+    bottom: var(--artwork-button-offset);
 }
 
 
@@ -361,9 +336,9 @@
 
 .fs-more-btn {
 
-    right: var(--floating-offset);
+    right: var(--artwork-button-offset);
 
-    bottom: var(--floating-offset);
+    bottom: var(--artwork-button-offset);
 }
 
 .fs-controls button,
@@ -373,6 +348,14 @@
 
     -webkit-tap-highlight-color:
         transparent;
+}
+
+.fs-favorite-btn .icon,
+.fs-more-btn .icon{
+
+    width:var(--floating-icon-size);
+
+    height:var(--floating-icon-size);
 }
 
 /* SONG INFO */
@@ -817,26 +800,15 @@
 
     color: white;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.16),
-            rgba(255,255,255,0.05)
-        );
+    background: rgba(255,255,255,0.14);
 
-    border:
-        1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
 
-    backdrop-filter: blur(28px);
+    backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(28px);
 
-    box-shadow:
-        0 24px 60px rgba(0,0,0,0.58),
-        0 0 60px rgba(255,255,255,0.08),
-        inset 0 1px 1px rgba(255,255,255,0.12);
-    
-    animation:
-        fsPlayBreath 3.2s ease-in-out infinite;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    animation: none;
 
     overflow: hidden;
 
@@ -879,6 +851,20 @@
     display:flex;
     
     gap:14px;
+
+}
+
+.icon{
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    fill:currentColor;
+    stroke:currentColor;
+
+    pointer-events:none;
 
 }
 
