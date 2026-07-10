@@ -63,6 +63,8 @@ function closeFullscreen(){
     isDraggingFS = false;
     
     dragDistance = 0;
+
+    fsPlayer.style.transition = "";
     fsPlayer.style.transform = "";
 
     fsPlayer.classList.add("hidden");
@@ -164,6 +166,8 @@ window.addEventListener(
 
 
 function startTouchDrag(e){
+
+    if (e.target.closest("button")) return;
 
     dragStartY = e.touches[0].clientY;
 
