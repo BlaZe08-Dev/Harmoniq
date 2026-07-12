@@ -502,10 +502,31 @@ function togglePlay() {
 }
 
 function playNext() {
+
     if (!queue.length) return;
 
+    if (endAfterCurrentSong) {
+
+        audio.pause();
+
+        showToast({
+
+            icon: "🌙",
+
+            message: "Sleep Timer Finished"
+
+        });
+
+        clearSleepTimer();
+
+        return;
+
+    }
+
     currentIndex = (currentIndex + 1) % queue.length;
+
     playAudio(queue[currentIndex]);
+
 }
 
 function playPrevious() {

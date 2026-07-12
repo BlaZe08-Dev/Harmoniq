@@ -65,6 +65,15 @@ if(fsFavoriteBtn){
 
 }
 
+if(fsSleepBtn){
+
+    fsSleepBtn.addEventListener(
+        "click",
+        openSleepTimerSheet
+    );
+
+}
+
 function closeFullscreen(){
     
     hasStartedDragging = false;
@@ -282,5 +291,84 @@ function toggleCurrentSongFavorite(){
         });
 
     }
+
+}
+
+// Sleep Timer
+function openSleepTimerSheet(){
+
+    const content = document.createElement("div");
+
+    const options = [
+
+        { label: "15 Minutes", minutes: 15 },
+
+        { label: "30 Minutes", minutes: 30 },
+
+        { label: "45 Minutes", minutes: 45 },
+
+        { label: "1 Hour", minutes: 60 },
+
+        { label: "End of Current Song", endSong: true },
+
+        { label: "Cancel Timer", cancel: true }
+
+    ];
+
+    options.forEach(option => {
+
+        const item = document.createElement("div");
+
+        item.className = "sheet-option";
+
+        if(option.cancel){
+
+            item.classList.add("cancel");
+
+        }
+
+        item.textContent = option.label;
+
+        item.addEventListener("click", () => {
+
+            if(option.minutes){
+
+                setSleepTimer(option.minutes);
+
+            }
+            else if(option.endSong){
+
+                setEndAfterCurrentSong();
+                
+            }
+            else if(option.cancel){
+
+                clearSleepTimer();
+
+                showToast({
+
+                    icon:"🌙",
+
+                    message:"Sleep Timer Cancelled"
+
+                });
+
+            }
+
+            closeBottomSheet();
+
+        });
+
+        content.appendChild(item);
+
+    });
+
+    openBottomSheet({
+
+        title: "Sleep Timer",
+
+        content
+
+    });
 
 }

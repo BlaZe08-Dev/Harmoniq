@@ -15,7 +15,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    z-index: 9000;
+    z-index: 10002;
 
     opacity: 1;
 
@@ -107,5 +107,43 @@
     overflow-y: auto;
 
     color: white;
+
+}
+
+.sheet-option{
+
+    padding: 18px 20px;
+
+    border-radius: 16px;
+
+    margin-bottom: 10px;
+
+    background: rgba(255,255,255,.05);
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+.sheet-option:hover{
+
+    background: rgba(255,255,255,.10);
+
+}
+
+.sheet-option:active{
+
+    transform: scale(.98);
+
+}
+
+.sheet-option.cancel{
+
+    color: #ff6b6b;
 
 }
