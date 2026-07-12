@@ -56,6 +56,15 @@ function initializeFullscreenIcons(){
 
 initializeFullscreenIcons();
 
+if(fsFavoriteBtn){
+
+    fsFavoriteBtn.addEventListener(
+        "click",
+        toggleCurrentSongFavorite
+    );
+
+}
+
 function closeFullscreen(){
     
     hasStartedDragging = false;
@@ -235,5 +244,43 @@ function endTouchDrag(){
         fsPlayer.style.transition = "";
 
     },250);
+
+}
+
+function toggleCurrentSongFavorite(){
+
+    const song = queue[currentIndex];
+
+    if(!song) return;
+
+    const wasFavorite = isFavorite(song);
+
+    toggleFavorite(song);
+
+    if(wasFavorite){
+
+        fsFavoriteBtn.innerHTML = Icons.heart;
+
+        showToast({
+
+            icon:"💔",
+
+            message: `${song.title} removed from Favorites`
+
+        });
+
+    }else{
+
+        fsFavoriteBtn.innerHTML = Icons.heartFilled;
+
+        showToast({
+
+            icon:"❤️",
+
+            message: `${song.title} added to Favorites`
+
+        });
+
+    }
 
 }

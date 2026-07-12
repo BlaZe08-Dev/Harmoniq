@@ -7,6 +7,9 @@
     
     <title>Harmoniq 🎧</title>
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/fav_notification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/bottom_sheets.css') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global/reset.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global/variables.css') }}">
@@ -80,6 +83,10 @@
 
 {% include 'components/fullscreen_player.html' %}
 
+{% include 'components/bottom_sheets.html' %}
+
+{% include 'components/fav_notification.html' %}
+
 <script src="https://pixijs.download/release/pixi.min.js"></script>
 
 <script src="{{ url_for('static', filename='js/modules/audio.js') }}"></script>
@@ -90,6 +97,12 @@
 
 <script src="{{ url_for('static', filename='js/modules/icons.js') }}"></script>
 
+<script src="{{ url_for('static', filename='js/components/fav_notification.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/components/bottom_sheets.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/favorites.js') }}"></script>
+
 <script src="{{ url_for('static', filename='js/modules/fullscreen.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/modules/playlist.js') }}"></script>
@@ -97,6 +110,8 @@
 <script src="{{ url_for('static', filename='js/modules/queue.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/modules/search.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/components/song_items.js') }}"></script>
 
 <script>
 let queue = [];

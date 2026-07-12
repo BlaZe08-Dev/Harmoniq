@@ -138,6 +138,14 @@ const Icons = {
         </svg>
     `,
 
+    heartFilled: `
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M12 21s-7-4.5-9-8.5C1.5 8 4 4 8 4c2 0 3.2 1 4 2 0.8-1 2-2 4-2 4 0 6.5 4 5 8.5C19 16.5 12 21 12 21z"
+                fill="currentColor"/>
+        </svg>
+    `,
+
     more: `
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="5" r="1.8" fill="currentColor"/>

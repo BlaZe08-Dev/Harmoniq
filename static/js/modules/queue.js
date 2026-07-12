@@ -7,7 +7,7 @@ function addToQueue(item) {
     // Always correct index
     currentIndex = queue.length - 1;
 
-    playAudio(queue[currentIndex].audio);
+    playAudio(queue[currentIndex]);
     updateQueueUI();
 }
 
@@ -18,38 +18,27 @@ function updateQueueUI() {
     queueList.innerHTML = "";
 
     queue.forEach((item, index) => {
-        let div = document.createElement("div");
-        div.className = "queue-item";
-        div.draggable = true;
+        
+        const div = createSongItem(item, {
+            
+            showMenu: true,
 
-        div.innerHTML = `
-        <div class="queue-left">
-            <img src="${item.thumbnail}">
-            <div>
-                <div>${item.title}</div>
-                <small>${item.artist}</small>
-            </div>
-        </div>
+            draggable: true,
 
-        <div class="queue-menu">
-            ⋮
-            <div class="menu-dropdown">
-                <div onclick="removeFromQueue(${index}); event.stopPropagation()">Remove</div>
-                <div onclick="addSongToPlaylist(${index}); event.stopPropagation()">Add to Playlist</div>
-            </div>
-        </div>
-        `;
+            menuIndex: index,
 
-        div.onclick = () => {
-            currentIndex = index;
-            playAudio(item.audio);
-            updateQueueUI();
-        };
+            highlight: index === currentIndex,
 
-        if (index === currentIndex) {
-            div.style.background = "rgba(29,185,84,0.15)";
-            div.style.border = "1px solid rgba(29,185,84,0.3)";
-        }
+            onClick: () => {
+
+                currentIndex = index;
+
+                playAudio(item);
+
+                updateQueueUI();
+
+            }
+        });
 
         queueList.appendChild(div);
     });

@@ -1,5 +1,6 @@
 const audio = document.getElementById("audioPlayer");
 let pixiApp;
+let currentSong = null;
 /* BAR STORAGE */
 
 let waveBars = [];
@@ -65,10 +66,9 @@ const audioContext =
 
     
     /* PLAYER */
-function playAudio(url) {
-    audio.src = url;
-    let song = queue[currentIndex];
-    console.log("Audio URL:", url);
+function playAudio(song) {
+    audio.src = song.audio;
+    console.log("Audio URL:", song.audio);
     audio.muted = false;
     audio.volume = 1;
     audio.play();
@@ -184,6 +184,8 @@ function playAudio(url) {
     document.getElementById("artistName").innerText = song?.artist || "";
     document.getElementById("playerThumbnail").src = song?.thumbnail || "";
 
+    
+
     document.getElementById("playBtn").innerText = "❚❚";
 
     document.getElementById("fsPlayBtn").innerText = "❚❚";
@@ -192,6 +194,14 @@ function playAudio(url) {
     document.getElementById("fsThumbnail").src = song?.thumbnail || "";
     document.getElementById("fsTitle").innerText = song?.title || "";
     document.getElementById("fsArtist").innerText = song?.artist || "";
+
+    if(isFavorite(song)){
+        
+        fsFavoriteBtn.innerHTML = Icons.heartFilled;
+    }else{
+        
+        fsFavoriteBtn.innerHTML = Icons.heart;
+    }
 
     getDominantColor(song?.thumbnail, (color) => {
 
@@ -379,7 +389,7 @@ function playAudio(url) {
             `;
         }
 
-        generateWaveform(url);
+        generateWaveform(song.audio);
     });
 }
 
@@ -495,12 +505,12 @@ function playNext() {
     if (!queue.length) return;
 
     currentIndex = (currentIndex + 1) % queue.length;
-    playAudio(queue[currentIndex].audio);
+    playAudio(queue[currentIndex]);
 }
 
 function playPrevious() {
     currentIndex = (currentIndex - 1 + queue.length) % queue.length;
-    playAudio(queue[currentIndex].audio);
+    playAudio(queue[currentIndex]);
 }
 
 function toggleShuffle() {

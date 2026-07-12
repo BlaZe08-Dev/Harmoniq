@@ -40,20 +40,24 @@ function openPlaylist(name) {
     if (!playlists[name]) return;
 
     container.innerHTML = "";
-
+    
     playlists[name].forEach(song => {
-        let div = document.createElement("div");
-        div.className = "queue-item";
-
-        div.innerHTML = `
-            <img src="${song.thumbnail}">
-            <div>
-                <div>${song.title}</div>
-                <small>${song.artist}</small>
-            </div>
-        `;
-
-        div.onclick = () => playAudio(song.audio);
+        
+        const div = createSongItem(song, {
+            
+            showMenu: false,
+            
+            highlight: currentSong?.audio === song.audio,
+            
+            onClick: () => {
+                
+                playAudio(song);
+                
+                openPlaylist(name);
+            
+            }
+        });
+        
         container.appendChild(div);
     });
     closeSidebar();
@@ -76,3 +80,6 @@ function addSongToPlaylist(index) {
         savePlaylists();
     }
 }
+
+window.renderPlaylists = renderPlaylists;
+window.savePlaylists = savePlaylists;
