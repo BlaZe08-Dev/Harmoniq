@@ -75,9 +75,19 @@ if(fsSleepBtn){
 }
 
 if(fsRepeatBtn){
+    
     fsRepeatBtn.addEventListener(
         "click",
         toggleRepeatMode
+    );
+
+}
+
+if(fsShuffleBtn){
+
+    fsShuffleBtn.addEventListener(
+        "click",
+        toggleShuffle
     );
 
 }
@@ -413,6 +423,26 @@ function toggleRepeatMode(){
             fsRepeatBtn.classList.remove("player-mode-active");
 
             break;
+
+    }
+
+}
+
+function toggleShuffle(){
+
+    isShuffle = !isShuffle;
+
+    if(isShuffle){
+
+        createShuffleQueue();
+
+        fsShuffleBtn.classList.add("player-mode-active");
+
+    }else{
+
+        shuffledQueue = [];
+
+        fsShuffleBtn.classList.remove("player-mode-active");
 
     }
 

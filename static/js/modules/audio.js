@@ -561,9 +561,74 @@ function playNext() {
 
     /* NORMAL NEXT */
 
+    if(isShuffle){
+
+        shuffleIndex++;
+
+        if(shuffleIndex >= shuffledQueue.length){
+
+            if(repeatMode === RepeatMode.ALL){
+
+                createShuffleQueue();
+
+                shuffleIndex = 0;
+
+            }else{
+
+                audio.pause();
+
+                return;
+
+            }
+
+        }
+
+        const nextSong = shuffledQueue[shuffleIndex];
+
+        currentIndex = queue.findIndex(
+            song => song.audio === nextSong.audio
+        );
+
+        playAudio(nextSong);
+
+        return;
+
+    }
+
     currentIndex++;
 
     playAudio(queue[currentIndex]);
+
+}
+
+function createShuffleQueue(){
+
+    if(!queue.length) return;
+
+    const currentSong = queue[currentIndex];
+
+    const remainingSongs = queue.filter(
+        song => song !== currentSong
+    );
+
+    for(let i = remainingSongs.length - 1; i > 0; i--){
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [remainingSongs[i], remainingSongs[j]] =
+        [remainingSongs[j], remainingSongs[i]];
+
+    }
+
+    shuffledQueue = [
+
+        currentSong,
+
+        ...remainingSongs
+
+    ];
+
+    shuffledIndex = 0;
 
 }
 
