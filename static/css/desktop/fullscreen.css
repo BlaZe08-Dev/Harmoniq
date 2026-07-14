@@ -699,6 +699,16 @@
     transform: scale(1.08);
 }
 
+.player-mode-active{
+
+
+    opacity: 1 !important;
+
+    transform: scale(1.08);
+
+
+}
+
 /* MAIN CONTROLS */
 
 .fs-controls{

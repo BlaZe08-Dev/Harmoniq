@@ -505,6 +505,8 @@ function playNext() {
 
     if (!queue.length) return;
 
+    /* SLEEP TIMER */
+
     if (endAfterCurrentSong) {
 
         audio.pause();
@@ -523,7 +525,43 @@ function playNext() {
 
     }
 
-    currentIndex = (currentIndex + 1) % queue.length;
+    /* REPEAT CURRENT SONG */
+
+    if (repeatMode === RepeatMode.ONE) {
+
+        playAudio(queue[currentIndex]);
+
+        return;
+
+    }
+
+    /* LAST SONG */
+
+    if (currentIndex >= queue.length - 1) {
+
+        if (repeatMode === RepeatMode.ALL) {
+
+            currentIndex = 0;
+
+            playAudio(queue[currentIndex]);
+
+        } else {
+
+            audio.pause();
+
+            document.getElementById("playBtn").innerHTML = Icons.play;
+
+            document.getElementById("fsPlayBtn").innerHTML = Icons.play;
+
+        }
+
+        return;
+
+    }
+
+    /* NORMAL NEXT */
+
+    currentIndex++;
 
     playAudio(queue[currentIndex]);
 

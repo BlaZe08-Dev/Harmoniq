@@ -126,6 +126,48 @@ const Icons = {
                 fill="none"/>
         </svg>
     `,
+    repeatOne: `
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+
+            <!-- reuse your repeat icon -->
+
+            <path d="M17 2L21 6L17 10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"/>
+
+            <path d="M3 11V8A2 2 0 0 1 5 6H21"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                fill="none"/>
+
+            <path d="M7 22L3 18L7 14"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"/>
+
+            <path d="M21 13V16A2 2 0 0 1 19 18H3"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                fill="none"/>
+
+            <!-- number 1 -->
+
+            <text
+                x="12"
+                y="15"
+                text-anchor="middle"
+                font-size="8"
+                fill="currentColor"
+                font-weight="700">1</text>
+        </svg>
+    `,
 
     heart: `
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">

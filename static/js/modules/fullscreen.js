@@ -74,6 +74,14 @@ if(fsSleepBtn){
 
 }
 
+if(fsRepeatBtn){
+    fsRepeatBtn.addEventListener(
+        "click",
+        toggleRepeatMode
+    );
+
+}
+
 function closeFullscreen(){
     
     hasStartedDragging = false;
@@ -181,7 +189,6 @@ window.addEventListener(
     "touchend",
     endTouchDrag
 );
-
 
 function startTouchDrag(e){
 
@@ -370,5 +377,43 @@ function openSleepTimerSheet(){
         content
 
     });
+
+}
+
+function toggleRepeatMode(){
+
+    switch(repeatMode){
+
+        case RepeatMode.OFF:
+
+            repeatMode = RepeatMode.ALL;
+
+            fsRepeatBtn.innerHTML = Icons.repeat;
+
+            fsRepeatBtn.classList.add("player-mode-active");
+
+            break;
+
+        case RepeatMode.ALL:
+
+            repeatMode = RepeatMode.ONE;
+
+            fsRepeatBtn.innerHTML = Icons.repeatOne;
+
+            fsRepeatBtn.classList.add("player-mode-active");
+
+            break;
+
+        case RepeatMode.ONE:
+
+            repeatMode = RepeatMode.OFF;
+
+            fsRepeatBtn.innerHTML = Icons.repeat;
+
+            fsRepeatBtn.classList.remove("player-mode-active");
+
+            break;
+
+    }
 
 }
