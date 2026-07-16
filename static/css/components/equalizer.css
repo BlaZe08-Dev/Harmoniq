@@ -1,0 +1,239 @@
+.equalizer-screen{
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    width: 100%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0b0b0b,
+            #000
+        );
+
+    z-index: 10005;
+
+    color: white;
+
+}
+.eq-header{
+
+    height:88px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 24px;
+
+}
+
+.eq-title-group{
+
+    text-align:center;
+
+    flex:1;
+
+}
+
+.eq-title-group h1{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+}
+
+.eq-title-group p{
+
+    margin-top:4px;
+
+    font-size:13px;
+
+    opacity:.45;
+
+}
+
+.eq-status{
+
+    width:48px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+}
+
+.eq-status-dot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#1DB954;
+
+    box-shadow:
+
+        0 0 10px #1DB954,
+
+        0 0 20px #1DB954;
+
+}
+
+.eq-visualizer{
+
+    height:180px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+}
+
+#eqVisualizer{
+
+    width:92%;
+
+    height:140px;
+
+    border-radius:18px;
+
+}
+
+.eq-controls{
+
+    display:flex;
+
+    justify-content:space-evenly;
+
+    align-items:center;
+
+    margin-top:20px;
+
+}
+
+.eq-knob{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.eq-value{
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+.knob{
+
+    width:110px;
+
+    height:110px;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            #2d2d2d,
+
+            #111
+
+        );
+
+    position:relative;
+
+}
+
+.knob-indicator{
+
+    position:absolute;
+
+    top:10px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:4px;
+
+    height:20px;
+
+    border-radius:2px;
+
+    background:white;
+
+}
+
+.eq-presets{
+
+    flex:0 0 auto;
+
+}
+
+.eq-footer{
+
+    flex:0 0 80px;
+
+}
+
+.eq-back-btn{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.06);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.eq-back-btn:hover{
+
+    transform:scale(1.05);
+
+    background:rgba(255,255,255,.10);
+
+}

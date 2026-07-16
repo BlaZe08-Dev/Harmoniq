@@ -8,6 +8,7 @@ const fsPlayBtn = document.getElementById("fsPlayBtn");
 const fsPrevBtn = document.getElementById("fsPrevBtn");
 const fsNextBtn = document.getElementById("fsNextBtn");
 const fsEqBtn = document.getElementById("fsEqBtn");
+const equalizerScreen = document.getElementById("equalizerScreen");
 const fsSleepBtn = document.getElementById("fsSleepBtn");
 const fsRepeatBtn = document.getElementById("fsRepeatBtn");
 const fsShuffleBtn = document.getElementById("fsShuffleBtn");
@@ -88,6 +89,15 @@ if(fsShuffleBtn){
     fsShuffleBtn.addEventListener(
         "click",
         toggleShuffle
+    );
+
+}
+
+if(fsEqBtn){
+
+    fsEqBtn.addEventListener(
+        "click",
+        openEqualizer
     );
 
 }
@@ -445,5 +455,26 @@ function toggleShuffle(){
         fsShuffleBtn.classList.remove("player-mode-active");
 
     }
+
+}
+
+function openEqualizer(){
+
+    console.log(equalizerScreen);
+    if(!equalizerScreen) return;
+
+    fsPlayer.classList.add("hidden");
+
+    equalizerScreen.classList.remove("hidden");
+
+}
+
+function closeEqualizer(){
+
+    if(!equalizerScreen) return;
+
+    equalizerScreen.classList.add("hidden");
+
+    fsPlayer.classList.remove("hidden");
 
 }

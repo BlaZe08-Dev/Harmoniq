@@ -8,7 +8,12 @@
     <title>Harmoniq 🎧</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/fav_notification.css') }}">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/bottom_sheets.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/equalizer.css') }}">
+
+    
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global/reset.css') }}">
 
@@ -38,7 +43,7 @@
 </head>
 
 <body>
-    <div class="mobile-overlay" id="mobileOverlay"></div>
+
 
 {% include 'components/loader.html' %}
 
@@ -85,6 +90,8 @@
 
 {% include 'components/bottom_sheets.html' %}
 
+{% include 'components/equalizer.html' %}
+
 {% include 'components/fav_notification.html' %}
 
 <script src="https://pixijs.download/release/pixi.min.js"></script>
@@ -100,6 +107,8 @@
 <script src="{{ url_for('static', filename='js/components/fav_notification.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/components/bottom_sheets.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/equalizer.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/modules/sleep_timer.js') }}"></script>
 
