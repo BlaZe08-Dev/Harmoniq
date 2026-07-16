@@ -1,5 +1,6 @@
 <div id="equalizerScreen" class="equalizer-screen hidden">
-    
+
+    <!-- HEADER -->
 
     <div class="eq-header">
 
@@ -25,60 +26,162 @@
 
     </div>
 
+
+    <!-- VISUALIZER -->
+
     <div class="eq-visualizer">
 
         <canvas id="eqVisualizer"></canvas>
 
     </div>
 
+
+    <!-- CONTROLS -->
+
     <div class="eq-controls">
+
+        <!-- BASS -->
 
         <div class="eq-knob" data-band="bass">
 
-            <div class="eq-value">0</div>
+            <div class="eq-knob-value">
 
-            <div class="knob">
-
-                <div class="knob-indicator"></div>
+                ±0 dB
 
             </div>
 
-            <span>BASS</span>
+            <div class="eq-knob-wheel">
+
+                <div class="eq-knob-indicator"></div>
+
+            </div>
+
+            <div class="eq-knob-label">
+
+                BASS
+
+            </div>
 
         </div>
+
+
+        <!-- MID -->
 
         <div class="eq-knob" data-band="mid">
 
-            <div class="eq-value">0</div>
+            <div class="eq-knob-value">
 
-            <div class="knob">
-
-                <div class="knob-indicator"></div>
+                ±0 dB
 
             </div>
 
-            <span>MID</span>
+            <div class="eq-knob-wheel">
+
+                <div class="eq-knob-indicator"></div>
+
+            </div>
+
+            <div class="eq-knob-label">
+
+                MID
+
+            </div>
 
         </div>
 
+
+        <!-- TREBLE -->
+
         <div class="eq-knob" data-band="treble">
 
-            <div class="eq-value">0</div>
+            <div class="eq-knob-value">
 
-            <div class="knob">
-
-                <div class="knob-indicator"></div>
+                ±0 dB
 
             </div>
 
-            <span>TREBLE</span>
+            <div class="eq-knob-wheel">
+
+                <div class="eq-knob-indicator"></div>
+
+            </div>
+
+            <div class="eq-knob-label">
+
+                TREBLE
+
+            </div>
 
         </div>
 
     </div>
 
-    <div class="eq-presets"></div>
 
-    <div class="eq-footer"></div>
+    <!-- PRESETS -->
+
+    <div class="eq-presets">
+
+        <button
+            class="preset-chip active"
+            data-preset="flat">
+
+            Flat
+
+        </button>
+
+        <button
+            class="preset-chip"
+            data-preset="bass-boost">
+
+            Bass Boost
+
+        </button>
+
+        <button
+            class="preset-chip"
+            data-preset="vocal">
+
+            Vocal
+
+        </button>
+
+        <button
+            class="preset-chip"
+            data-preset="rock">
+
+            Rock
+
+        </button>
+
+        <button
+            class="preset-chip"
+            data-preset="jazz">
+
+            Jazz
+
+        </button>
+
+        <button
+            class="preset-chip"
+            data-preset="classical">
+
+            Classical
+
+        </button>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="eq-footer">
+
+        <button class="eq-reset-btn">
+
+            Reset
+
+        </button>
+
+    </div>
 
 </div>

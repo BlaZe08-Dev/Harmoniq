@@ -73,6 +73,11 @@ function playAudio(song) {
     audio.volume = 1;
     audio.play();
     
+    if(equalizerContext.state === "suspended"){
+        
+        equalizerContext.resume();
+    }
+    
     /* MOBILE PLAYER SYNC */
 
     if (window.innerWidth <= 768) {

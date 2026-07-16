@@ -1,13 +1,27 @@
-const closeEqualizerBtn =
-    document.getElementById("closeEqualizer");
-console.log(closeEqualizerBtn);
+const closeEqualizerBtn = document.getElementById("closeEqualizer");
+const presetChips = document.querySelectorAll(".preset-chip");
+
 
 if(closeEqualizerBtn){
 
     closeEqualizerBtn.addEventListener("click",()=>{
-        console.log("Back clicked");
-        
+
         closeEqualizer();
+        
     });
 
 }
+
+presetChips.forEach(chip => {
+
+    chip.addEventListener("click", () => {
+
+        presetChips.forEach(c =>
+            c.classList.remove("active")
+        );
+
+        chip.classList.add("active");
+
+    });
+
+});

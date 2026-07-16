@@ -140,9 +140,11 @@
 
     gap:14px;
 
+    transition:.25s;
+
 }
 
-.eq-value{
+.eq-knob-value{
 
     font-size:18px;
 
@@ -150,7 +152,7 @@
 
 }
 
-.knob{
+.eq-knob-wheel{
 
     width:110px;
 
@@ -172,9 +174,12 @@
 
     position:relative;
 
+    touch-action:none;
+    cursor:grab;
+
 }
 
-.knob-indicator{
+.eq-knob-indicator{
 
     position:absolute;
 
@@ -194,9 +199,104 @@
 
 }
 
+.eq-knob.active{
+
+    transform:scale(1.05);
+
+}
+
+.eq-knob-label{
+
+    font-size:13px;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+    opacity:.75;
+
+}
+
+.eq-reset-btn{
+
+    border:none;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    opacity:.8;
+
+    transition:.25s;
+
+}
+
+.eq-reset-btn:hover{
+
+    opacity:1;
+
+}
+
+
 .eq-presets{
 
+    display:flex;
+
+    gap:14px;
+
+    overflow-x:auto;
+
+    padding:28px 20px;
+
+    scrollbar-width:none;
+
+}
+
+.eq-presets::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.preset-chip{
+
     flex:0 0 auto;
+
+    border:none;
+
+    border-radius:999px;
+
+    padding:12px 22px;
+
+    background:rgba(255,255,255,.07);
+
+    color:white;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.preset-chip:hover{
+
+    background:rgba(255,255,255,.12);
+
+}
+
+.preset-chip.active{
+
+    background:white;
+
+    color:black;
+
+    font-weight:600;
 
 }
 
