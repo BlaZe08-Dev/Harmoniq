@@ -67,6 +67,9 @@ const audioContext =
     
     /* PLAYER */
 function playAudio(song) {
+    
+    /* AUDIO ENGINE */
+
     audio.src = song.audio;
     console.log("Audio URL:", song.audio);
     audio.muted = false;
@@ -171,6 +174,8 @@ function playAudio(song) {
         }
     }
 
+    /* AMBIENT EFFECTS */
+
     const ambient = document.getElementById("musicAmbient");
 
     ambient.classList.add("active");
@@ -182,8 +187,11 @@ function playAudio(song) {
         window.eqRunning = true;
     }
 
-
+    /* RECENTLY PLAYED */
+    
     if (song) saveRecentlyPlayed(song);
+    
+    /*DESKTOP PLAYER SYNC */
 
     document.getElementById("nowPlaying").innerText = song?.title || "No song";
     document.getElementById("artistName").innerText = song?.artist || "";
@@ -195,10 +203,12 @@ function playAudio(song) {
 
     document.getElementById("fsPlayBtn").innerText = "❚❚";
 
-    // FULLSCREEN SYNC
+    /* FULLSCREEN PLAYER SYNC */
     document.getElementById("fsThumbnail").src = song?.thumbnail || "";
     document.getElementById("fsTitle").innerText = song?.title || "";
     document.getElementById("fsArtist").innerText = song?.artist || "";
+
+    /* FAVORITES */
 
     if(isFavorite(song)){
         
@@ -208,6 +218,7 @@ function playAudio(song) {
         fsFavoriteBtn.innerHTML = Icons.heart;
     }
 
+    /* DYNAMIC THEME ENGINE */
     getDominantColor(song?.thumbnail, (color) => {
 
         let rgb = color.match(/\d+/g);
@@ -393,7 +404,9 @@ function playAudio(song) {
                 0 0 18px ${pastelSoft}
             `;
         }
-
+        
+        /* GENERATE WAVEFORM */
+        
         generateWaveform(song.audio);
     });
 }
