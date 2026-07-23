@@ -32,7 +32,6 @@ function searchMusic() {
 
     if (!query || query.length < 2) return;
 
-    // 🔥 USE CACHE FIRST
     if (searchCache[query]) {
         showResults(searchCache[query]);
         return;
@@ -43,7 +42,11 @@ function searchMusic() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ query })
     })
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok)
+            throw new Error("Search failed");
+        return res.json();
+    })
     .then(data => {
 
         // 🔥 SAVE TO CACHE (memory)

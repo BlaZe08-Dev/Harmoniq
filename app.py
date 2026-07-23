@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()  
 cache = {}
-CACHE_TTL = 600 #10 minutes
+CACHE_TTL = 600
 app = Flask(__name__)
 
-JAMENDO_CLIENT_ID = os.getenv("JAMENDO_CLIENT_ID")  # 🔥 put your Jamendo client ID here
+JAMENDO_CLIENT_ID = os.getenv("JAMENDO_CLIENT_ID")
 
 
 @app.route("/")

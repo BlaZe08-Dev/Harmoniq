@@ -6,8 +6,8 @@ function addToQueue(item) {
 
     // Always correct index
     currentIndex = queue.length - 1;
-
-    playAudio(queue[currentIndex]);
+    const currentSong = queue[currentIndex];
+    playAudio(currentSong);
     updateQueueUI();
 }
 
@@ -51,6 +51,8 @@ function removeFromQueue(index) {
     if (!queue.length) {
 
         currentIndex = -1;
+        audio.pause();
+        audio.src = "";
 
     } else if (index <= currentIndex) {
 
