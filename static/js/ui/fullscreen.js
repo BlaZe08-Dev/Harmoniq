@@ -459,8 +459,7 @@ function toggleShuffle(){
 }
 
 function openEqualizer(){
-
-    console.log(equalizerScreen);
+    
     if(!equalizerScreen) return;
 
     fsPlayer.classList.add("hidden");

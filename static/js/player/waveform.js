@@ -124,7 +124,6 @@ async function generateWaveform(url){
         window.currentWaveform = filteredData;
 
         buildWaveformWorld(filteredData);
-        console.log(filteredData.length);
 
         window.animatedWaveform = [...filteredData];
 }
@@ -269,8 +268,6 @@ function renderWaveform(){
 
         bar.tint = tint;
     }
-
-    console.log(audio.currentTime, waveGroup.x);
     
 }
 
@@ -335,7 +332,6 @@ function buildWaveformWorld(data){
         waveBars.push(bar);
     }
 
-    console.log("Bars:", waveBars.length);
 }
 
 /* PLAYHEAD RENDER */
