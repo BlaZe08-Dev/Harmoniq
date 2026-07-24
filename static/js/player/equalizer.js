@@ -1,6 +1,8 @@
 const closeEqualizerBtn = document.getElementById("closeEqualizer");
+const resetEqualizerBtn = document.getElementById("resetEqualizer");
 const presetChips = document.querySelectorAll(".preset-chip");
 const eqKnobs = document.querySelectorAll(".eq-knob");
+
 
 let activeKnob = null;
 let activeState = null;
@@ -16,15 +18,21 @@ if(closeEqualizerBtn){
 
 }
 
+if(resetEqualizerBtn){
+
+    resetEqualizerBtn.addEventListener("click", () => {
+
+        applyPreset("flat");
+
+    });
+
+}
+
 presetChips.forEach(chip => {
 
     chip.addEventListener("click", () => {
 
-        presetChips.forEach(c =>
-            c.classList.remove("active")
-        );
-
-        chip.classList.add("active");
+        applyPreset(chip.dataset.preset);
 
     });
 
@@ -102,3 +110,34 @@ document.addEventListener("pointerup", () => {
     activeState = null;
 
 });
+
+function refreshEqualizerUI(){
+
+    eqKnobs.forEach(knob=>{
+
+        const band = knob.dataset.band;
+
+        const state = window.eqState[band];
+
+        const indicator =
+            knob.querySelector(".eq-knob-indicator");
+
+        const value =
+            knob.querySelector(".eq-knob-value");
+
+        indicator.style.transform =
+            `rotate(${state.rotation}deg)`;
+
+        value.innerText =
+            `${state.gain >= 0 ? "+" : ""}${state.gain.toFixed(1)} dB`;
+
+    });
+    presetChips.forEach(chip => {
+
+        chip.classList.toggle(
+            "active", chip.dataset.preset === window.eqState.activePreset
+        );
+
+    });
+
+}
