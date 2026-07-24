@@ -1,5 +1,7 @@
 const audio = document.getElementById("audioPlayer");
 
+audio.crossOrigin = "anonymous";
+
 let currentSong = null;
     
     /* PLAYER */
@@ -7,7 +9,12 @@ function playAudio(song) {
     
     /* AUDIO ENGINE */
     currentSong = song;
+    
     audio.src = song.audio;
+    /* INITIALIZE EQUALIZER */
+    if(!equalizerInitialized){
+        initializeEqualizer();
+    }
     console.log("Audio URL:", song.audio);
     audio.muted = false;
     audio.volume = 1;

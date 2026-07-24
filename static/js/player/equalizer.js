@@ -1,6 +1,10 @@
 const closeEqualizerBtn = document.getElementById("closeEqualizer");
 const presetChips = document.querySelectorAll(".preset-chip");
+const eqKnobs = document.querySelectorAll(".eq-knob");
 
+let activeKnob = null;
+let activeState = null;
+let lastPointerX = 0;
 
 if(closeEqualizerBtn){
 
@@ -23,5 +27,78 @@ presetChips.forEach(chip => {
         chip.classList.add("active");
 
     });
+
+});
+
+function setupEqualizerKnobs(){
+    eqKnobs.forEach(knob => {
+        const band = knob.dataset.band;
+        
+        const indicator = knob.querySelector(".eq-knob-indicator");
+        
+        const valueText = knob.querySelector(".eq-knob-value");
+
+        const state = window.eqState[band];
+
+        function updateKnob(){
+            
+            indicator.style.transform = `rotate(${state.rotation}deg)`;
+            
+            valueText.innerText = `${state.gain >= 0 ? "+" : ""}${state.gain.toFixed(1)} dB`;
+        }
+        
+        updateKnob();
+
+        let isEqDragging = false;
+
+        knob.addEventListener("pointerdown", (e) => {
+
+            activeKnob = knob;
+
+            activeState = state;
+
+            lastPointerX = e.clientX;
+
+            knob.setPointerCapture(e.pointerId);
+
+        });
+        
+    });
+
+}
+setupEqualizerKnobs();
+
+document.addEventListener("pointermove", (e) => {
+
+    if (!activeKnob) return;
+
+    const deltaX = e.clientX - lastPointerX;
+
+    lastPointerX = e.clientX;
+
+    activeState.gain += deltaX * 0.15;
+
+    activeState.gain = Math.max(-12, Math.min(12, activeState.gain));
+
+    activeState.rotation = activeState.gain * 11;
+
+    const indicator = activeKnob.querySelector(".eq-knob-indicator");
+
+    const valueText = activeKnob.querySelector(".eq-knob-value");
+
+    indicator.style.transform =`rotate(${activeState.rotation}deg)`;
+
+    valueText.innerText =
+        `${activeState.gain >= 0 ? "+" : ""}${activeState.gain.toFixed(1)} dB`;
+
+    applyEqualizerState();
+
+});
+
+document.addEventListener("pointerup", () => {
+
+    activeKnob = null;
+
+    activeState = null;
 
 });
