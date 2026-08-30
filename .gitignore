@@ -1,5 +1,7 @@
 .env
 __pycache__/
+venv/
+.venv/
 AGENTS.md
 PROJECT.md
 ROADMAP.md

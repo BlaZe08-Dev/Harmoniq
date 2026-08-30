@@ -1,13 +1,10 @@
 from flask import Flask, render_template, request, jsonify
-import requests, time, os
-from dotenv import load_dotenv
+from config import Config
+from services.music_provider import cache, search_jamendo
 
-load_dotenv()  
-cache = {}
-CACHE_TTL = 600
 app = Flask(__name__)
-
-JAMENDO_CLIENT_ID = os.getenv("JAMENDO_CLIENT_ID")
+app.config.from_object(Config)
+cache.init_app(app)
 
 
 @app.route("/")
@@ -17,35 +14,17 @@ def home():
 
 @app.route("/search", methods=["POST"])
 def search():
-    query = request.json.get("query").lower()
+    try:
+        data = request.get_json(force=True, silent=True) or {}
+        query = data.get("query")
+        if not query or not isinstance(query, str):
+            return jsonify({"error": "Invalid or missing 'query' parameter"}), 400
+    except Exception:
+        return jsonify({"error": "Malformed JSON payload"}), 400
 
-    
-    # Cache with expiry
-    if query in cache:
-        data, timestamp = cache[query]
-        if time.time() - timestamp < CACHE_TTL:
-            return jsonify(data)
-
-    url = f"https://api.jamendo.com/v3.0/tracks/?client_id={JAMENDO_CLIENT_ID}&format=json&limit=10&search={query}"
-
-    response = requests.get(url)
-    data = response.json()
-
-    results = []
-
-    for item in data.get("results", []):
-        results.append({
-            "title": item["name"],
-            "artist": item["artist_name"],
-            "thumbnail": item["album_image"],
-            "audio": item["audio"]  # ✅ REAL AUDIO URL
-        })
-
-    # 🔥 STORE WITH TIME
-    cache[query] = (results, time.time())
-
+    results = search_jamendo(query.lower().strip())
     return jsonify(results)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)   
+    app.run(host="0.0.0.0", port=5000, debug=app.config["DEBUG"])   
