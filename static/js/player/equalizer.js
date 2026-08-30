@@ -2,6 +2,7 @@ const closeEqualizerBtn = document.getElementById("closeEqualizer");
 const resetEqualizerBtn = document.getElementById("resetEqualizer");
 const presetChips = document.querySelectorAll(".preset-chip");
 const eqKnobs = document.querySelectorAll(".eq-knob");
+const eqToggle = document.getElementById("eqToggle");
 
 
 let activeKnob = null;
@@ -28,9 +29,29 @@ if(resetEqualizerBtn){
 
 }
 
+if(eqToggle){
+
+    eqToggle.addEventListener("click", () => {
+
+        window.eqState.eqEnabled = !window.eqState.eqEnabled;
+
+        refreshEqualizerUI();
+
+        applyEqualizerState();
+
+        if (typeof saveEqualizerSettings === "function") {
+            saveEqualizerSettings();
+        }
+
+    });
+
+}
+
 presetChips.forEach(chip => {
 
     chip.addEventListener("click", () => {
+
+        if (chip.disabled || chip.dataset.preset === "custom") return;
 
         applyPreset(chip.dataset.preset);
 
@@ -90,6 +111,8 @@ document.addEventListener("pointermove", (e) => {
 
     activeState.rotation = activeState.gain * 11;
 
+    window.eqState.activePreset = "custom";
+
     const indicator = activeKnob.querySelector(".eq-knob-indicator");
 
     const valueText = activeKnob.querySelector(".eq-knob-value");
@@ -99,7 +122,13 @@ document.addEventListener("pointermove", (e) => {
     valueText.innerText =
         `${activeState.gain >= 0 ? "+" : ""}${activeState.gain.toFixed(1)} dB`;
 
+    refreshEqualizerUI();
+
     applyEqualizerState();
+
+    if (typeof saveEqualizerSettings === "function") {
+        saveEqualizerSettings();
+    }
 
 });
 
@@ -132,6 +161,7 @@ function refreshEqualizerUI(){
             `${state.gain >= 0 ? "+" : ""}${state.gain.toFixed(1)} dB`;
 
     });
+
     presetChips.forEach(chip => {
 
         chip.classList.toggle(
@@ -140,4 +170,12 @@ function refreshEqualizerUI(){
 
     });
 
+    if (eqToggle) {
+        const isEnabled = window.eqState.eqEnabled !== false;
+        eqToggle.setAttribute("aria-checked", isEnabled ? "true" : "false");
+        eqToggle.classList.toggle("off", !isEnabled);
+    }
+
 }
+
+refreshEqualizerUI();

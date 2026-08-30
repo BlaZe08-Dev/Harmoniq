@@ -15,7 +15,9 @@ const eqState = {
         rotation: 0
     },
 
-    activePreset: "flat"
+    activePreset: "flat",
+
+    eqEnabled: true
 
 };
 

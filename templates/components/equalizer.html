@@ -18,9 +18,13 @@
 
         </div>
 
-        <div class="eq-status">
+        <div class="eq-toggle" id="eqToggle" role="switch" aria-checked="true">
 
-            <span class="eq-status-dot"></span>
+            <span class="eq-toggle-option eq-toggle-on">ON</span>
+
+            <span class="eq-toggle-option eq-toggle-off">OFF</span>
+
+            <span class="eq-toggle-thumb"></span>
 
         </div>
 
@@ -166,6 +170,15 @@
             data-preset="classical">
 
             Classical
+
+        </button>
+
+        <button
+            class="preset-chip"
+            data-preset="custom"
+            disabled>
+
+            Custom
 
         </button>
 

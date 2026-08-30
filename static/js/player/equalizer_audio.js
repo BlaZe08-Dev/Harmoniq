@@ -74,13 +74,15 @@ function initializeEqualizer(){
 /* EQUALIZER STATE */
 function applyEqualizerState(){
 
+    const enabled = window.eqState && window.eqState.eqEnabled !== false;
+
     if (bassFilter)
-        bassFilter.gain.value = window.eqState.bass.gain;
+        bassFilter.gain.value = enabled ? window.eqState.bass.gain : 0;
 
     if (midFilter)
-        midFilter.gain.value = window.eqState.mid.gain;
+        midFilter.gain.value = enabled ? window.eqState.mid.gain : 0;
 
     if (trebleFilter)
-        trebleFilter.gain.value = window.eqState.treble.gain;
+        trebleFilter.gain.value = enabled ? window.eqState.treble.gain : 0;
 
 }

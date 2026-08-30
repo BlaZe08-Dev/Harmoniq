@@ -60,4 +60,8 @@ function applyPreset(presetName){
 
     refreshEqualizerUI();
 
+    if (typeof saveEqualizerSettings === "function") {
+        saveEqualizerSettings();
+    }
+
 }
