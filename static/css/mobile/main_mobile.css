@@ -117,6 +117,7 @@
 
     /* SEARCH */
     .search-container{
+        position: relative;
         width: 55%;
         margin-bottom: 18px;
     }

@@ -90,6 +90,10 @@ body.sidebar-open .main {
 
 
 /* ===== SEARCH ===== */
+.search-container {
+    position: relative;
+}
+
 .search-box {
     position: relative;
     width: 100%;
