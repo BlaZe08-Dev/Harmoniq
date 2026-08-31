@@ -306,7 +306,8 @@ body.sidebar-open .main {
 .home-left {
     flex: 1.6;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     min-width: 0;
 }
 
