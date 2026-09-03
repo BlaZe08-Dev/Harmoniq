@@ -1,0 +1,120 @@
+/* ==========================================================
+   HARMONIQ DESIGN SYSTEM — DESIGN TOKENS
+   Cinematic, Atmospheric, Dark Ambient Sound Studio
+   ========================================================== */
+
+:root {
+    /* --- COLOR PALETTE: OBSIDIAN & ABYSS --- */
+    --bg-abyss: #07080c;
+    --bg-app: #08090e;
+    --bg-surface-0: #0d0f17;
+    --bg-surface-1: #131622;
+    --bg-surface-2: #1b2032;
+    --bg-surface-3: #242b44;
+
+    /* Frosted Glass Layers */
+    --bg-glass-subtle: rgba(255, 255, 255, 0.025);
+    --bg-glass-card: rgba(255, 255, 255, 0.045);
+    --bg-glass-hover: rgba(255, 255, 255, 0.08);
+    --bg-glass-active: rgba(255, 255, 255, 0.12);
+    --bg-glass-panel: rgba(13, 15, 23, 0.72);
+    --bg-glass-overlay: rgba(5, 6, 9, 0.78);
+
+    /* --- TWO-COLOR ACCENT SYSTEM --- */
+    /* Primary Accent: Neon Cyber-Mint (Playback, Active States, Energy) */
+    --accent-primary: #00f5a0;
+    --accent-primary-rgb: 0, 245, 160;
+    --accent-primary-hover: #1affb0;
+    --accent-primary-dim: rgba(0, 245, 160, 0.15);
+    --accent-primary-glow: rgba(0, 245, 160, 0.38);
+
+    /* Secondary Accent: Nebula Violet (Atmosphere, Mood Glow, Depth) */
+    --accent-secondary: #9d4edd;
+    --accent-secondary-rgb: 157, 78, 221;
+    --accent-secondary-hover: #b06ef0;
+    --accent-secondary-dim: rgba(157, 78, 221, 0.18);
+    --accent-secondary-glow: rgba(157, 78, 221, 0.42);
+
+    /* Tertiary Highlights: Electric Cyan & Sunset Rose */
+    --accent-cyan: #00d4ff;
+    --accent-cyan-rgb: 0, 212, 255;
+    --accent-rose: #ff2a85;
+    --accent-rose-glow: rgba(255, 42, 133, 0.4);
+
+    /* Status Colors */
+    --color-danger: #ff4757;
+    --color-warning: #ffa502;
+    --color-success: #00f5a0;
+
+    /* --- TYPOGRAPHY HIERARCHY --- */
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    --text-primary: #f8f9fd;
+    --text-secondary: rgba(240, 244, 255, 0.68);
+    --text-tertiary: rgba(210, 222, 255, 0.42);
+    --text-muted: rgba(185, 200, 245, 0.26);
+    --text-accent: var(--accent-primary);
+
+    /* --- BORDERS & SEPARATORS --- */
+    --border-subtle: rgba(255, 255, 255, 0.055);
+    --border-medium: rgba(255, 255, 255, 0.11);
+    --border-bright: rgba(255, 255, 255, 0.22);
+    --border-accent: rgba(0, 245, 160, 0.35);
+    --border-secondary: rgba(157, 78, 221, 0.35);
+
+    /* --- SHADOWS, BLURS & GLOWS --- */
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.55);
+    --shadow-card: 0 14px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--border-subtle);
+    --shadow-card-hover: 0 20px 48px -6px rgba(0, 0, 0, 0.8), 0 0 28px var(--accent-primary-dim), 0 0 0 1px var(--border-accent);
+    --shadow-dock: 0 -12px 40px -4px rgba(0, 0, 0, 0.75), 0 -1px 0 0 var(--border-subtle);
+    --shadow-popover: 0 24px 64px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px var(--border-medium);
+
+    --glow-primary: 0 0 24px var(--accent-primary-glow);
+    --glow-secondary: 0 0 32px var(--accent-secondary-glow);
+    --glow-button: 0 4px 20px var(--accent-primary-glow);
+
+    --blur-glass: blur(20px);
+    --blur-heavy: blur(40px);
+    --blur-ambient: blur(100px);
+
+    /* --- SPACING SCALE --- */
+    --space-2xs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 14px;
+    --space-lg: 20px;
+    --space-xl: 28px;
+    --space-2xl: 40px;
+    --space-3xl: 56px;
+
+    /* --- BORDER RADIUS --- */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-pill: 9999px;
+
+    /* --- EASINGS & ANIMATIONS --- */
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-fast: 0.16s ease;
+    --transition-normal: 0.26s var(--ease-smooth);
+    --transition-slow: 0.42s var(--ease-smooth);
+
+    /* --- Z-INDEX LAYERS --- */
+    --z-background: -1;
+    --z-base: 1;
+    --z-sidebar-trigger: 998;
+    --z-sidebar: 999;
+    --z-playerbar: 1000;
+    --z-dropdown: 1050;
+    --z-fullscreen: 10000;
+    --z-toast: 10001;
+    --z-bottomsheet: 10002;
+    --z-equalizer: 10005;
+    --z-loader: 999999;
+}

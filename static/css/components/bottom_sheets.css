@@ -1,149 +1,107 @@
-.bottom-sheet-overlay{
+/* ==========================================================
+   BOTTOM SHEETS (PLAYLISTS & TRACK OPTIONS)
+   Frosted Obsidian Modal Drawer
+   ========================================================== */
 
+.bottom-sheet-overlay {
     position: fixed;
-
     inset: 0;
-
     display: flex;
-
     justify-content: center;
-
     align-items: flex-end;
-
-    background: rgba(0,0,0,.45);
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    z-index: 10002;
-
+    background: rgba(4, 5, 8, 0.68);
+    backdrop-filter: var(--blur-glass, blur(20px));
+    -webkit-backdrop-filter: var(--blur-glass, blur(20px));
+    z-index: var(--z-bottomsheet, 10002);
     opacity: 1;
-
-    transition: opacity .25s ease;
-
+    transition: opacity 0.25s var(--ease-smooth);
 }
 
-.bottom-sheet-overlay.hidden{
-
+.bottom-sheet-overlay.hidden {
     opacity: 0;
-
     pointer-events: none;
-
 }
 
-.bottom-sheet{
-
-    width: min(100%, 520px);
-
+.bottom-sheet {
+    width: min(100%, 500px);
     min-height: 180px;
-
     max-height: 80vh;
-
-    background: #151515;
-
-    border-radius: 26px 26px 0 0;
-
-    box-shadow:
-        0 -10px 40px rgba(0,0,0,.35);
-
+    background: rgba(13, 16, 25, 0.95);
+    backdrop-filter: var(--blur-heavy, blur(40px));
+    -webkit-backdrop-filter: var(--blur-heavy, blur(40px));
+    border-radius: var(--radius-xl, 24px) var(--radius-xl, 24px) 0 0;
+    border: 1px solid var(--border-medium, rgba(255, 255, 255, 0.11));
+    border-bottom: none;
+    box-shadow: 0 -16px 60px rgba(0, 0, 0, 0.85);
     transform: translateY(100%);
-
-    transition: transform .35s cubic-bezier(.22,.8,.2,1);
-
+    transition: transform 0.35s var(--ease-smooth, cubic-bezier(0.16, 1, 0.3, 1));
     overflow: hidden;
-
     display: flex;
-
     flex-direction: column;
-
 }
 
-.bottom-sheet-overlay:not(.hidden) .bottom-sheet{
-
+.bottom-sheet-overlay:not(.hidden) .bottom-sheet {
     transform: translateY(0);
-
 }
 
-.bottom-sheet-handle{
-
-    width: 56px;
-
-    height: 5px;
-
-    border-radius: 999px;
-
-    background: rgba(255,255,255,.22);
-
-    margin: 12px auto;
-
+.bottom-sheet-handle {
+    width: 48px;
+    height: 4px;
+    border-radius: var(--radius-pill, 9999px);
+    background: rgba(255, 255, 255, 0.2);
+    margin: 12px auto 8px auto;
 }
 
-.bottom-sheet-header{
-
-    padding: 8px 24px 18px;
-
+.bottom-sheet-header {
+    padding: 10px 24px 16px 24px;
     text-align: center;
-
-    border-bottom: 1px solid rgba(255,255,255,.06);
-
+    border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.055));
 }
 
-.bottom-sheet-header h2{
-
+.bottom-sheet-header h2 {
     margin: 0;
-
-    font-size: 20px;
-
-    font-weight: 600;
-
-    color: white;
-
+    font-family: var(--font-display, 'Space Grotesk', sans-serif);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text-primary, #f8f9fd);
 }
 
-.bottom-sheet-content{
-
-    padding: 22px;
-
+.bottom-sheet-content {
+    padding: 20px;
     overflow-y: auto;
-
-    color: white;
-
+    color: var(--text-primary, #f8f9fd);
 }
 
-.sheet-option{
-
-    padding: 18px 20px;
-
-    border-radius: 16px;
-
-    margin-bottom: 10px;
-
-    background: rgba(255,255,255,.05);
-
-    color: white;
-
-    font-size: 16px;
-
+.sheet-option {
+    padding: 15px 18px;
+    border-radius: var(--radius-md, 12px);
+    margin-bottom: 8px;
+    background: var(--bg-glass-card, rgba(255, 255, 255, 0.045));
+    border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.055));
+    color: var(--text-primary, #f8f9fd);
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
-
-    transition: .2s;
-
+    transition: all var(--transition-fast);
 }
 
-.sheet-option:hover{
-
-    background: rgba(255,255,255,.10);
-
+.sheet-option:hover {
+    background: var(--bg-glass-hover, rgba(255, 255, 255, 0.08));
+    border-color: var(--border-medium, rgba(255, 255, 255, 0.11));
+    transform: translateX(4px);
 }
 
-.sheet-option:active{
-
-    transform: scale(.98);
-
+.sheet-option:active {
+    transform: scale(0.98);
 }
 
-.sheet-option.cancel{
+.sheet-option.cancel {
+    color: var(--color-danger, #ff4757);
+    border-color: rgba(255, 71, 87, 0.2);
+}
 
-    color: #ff6b6b;
-
+.sheet-option.cancel:hover {
+    background: rgba(255, 71, 87, 0.12);
+    border-color: rgba(255, 71, 87, 0.4);
 }
