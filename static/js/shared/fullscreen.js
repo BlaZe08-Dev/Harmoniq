@@ -25,6 +25,8 @@ let dragDistance = 0;
 
 let hasStartedDragging = false;
 
+let touchStartedOnButton = false;
+
 function initializeFullscreenIcons(){
 
     if(fsPlayBtn)
@@ -212,7 +214,9 @@ window.addEventListener(
 
 function startTouchDrag(e){
 
-    if (e.target.closest("button")) return;
+    touchStartedOnButton = !!e.target.closest("button");
+
+    if (touchStartedOnButton) return;
 
     dragStartY = e.touches[0].clientY;
 
@@ -224,6 +228,8 @@ function startTouchDrag(e){
 }
 
 function dragTouch(e){
+
+    if (touchStartedOnButton) return;
 
     if(!e.touches.length) return;
     
@@ -251,6 +257,11 @@ function dragTouch(e){
 }
 
 function endTouchDrag(){
+
+    if (touchStartedOnButton) {
+        touchStartedOnButton = false;
+        return;
+    }
 
     // It was just a tap, not a drag
     if(!hasStartedDragging){

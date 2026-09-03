@@ -315,6 +315,12 @@ body.sidebar-open .main {
     min-width: 0;
 }
 
+@media (max-width: 768px) {
+    .home-left {
+        overflow-y: visible;
+    }
+}
+
 .home-right {
     padding-left: 20px;
     border-left: 1px solid rgba(255,255,255,0.05);
