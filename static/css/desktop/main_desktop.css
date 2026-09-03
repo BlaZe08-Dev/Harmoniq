@@ -195,31 +195,86 @@ body.sidebar-open .main {
 
 /* ===== RECOMMENDATIONS ===== */
 #recommendList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
 }
 
 .recommend-item {
+    position: relative;
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.04);
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: 0.2s;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s ease, background 0.25s ease;
 }
 
 .recommend-item:hover {
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    transform: scale(1.02);
+    transform: translateY(-4px);
 }
 
 .recommend-item img {
-    width: 55px;
-    height: 55px;
-    border-radius: 6px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.recommend-info {
+    min-width: 0;
+}
+
+.recommend-info div {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recommend-info small {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recommend-play-btn {
+    position: absolute;
+    right: 18px;
+    bottom: 68px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #1DB954;
+    color: #0b0b0b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 16px rgba(29, 185, 84, 0.5);
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.recommend-play-btn .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.recommend-item:hover .recommend-play-btn {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ===== QUEUE ===== */

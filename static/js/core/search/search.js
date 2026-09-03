@@ -117,7 +117,8 @@ function loadRecommendations() {
 
                 div.innerHTML = `
                     <img src="${item.thumbnail}">
-                    <div>
+                    <button class="recommend-play-btn">${Icons.play}</button>
+                    <div class="recommend-info">
                         <div>${item.title}</div>
                         <small>${item.artist}</small>
                     </div>
