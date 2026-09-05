@@ -1,56 +1,170 @@
-/*  SIDEBAR TRIGGER */
-#sidebarTrigger {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 12px;
-    height: 100vh;
-    z-index: 1000;
-}
+/* ==========================================================
+   HARMONIQ DESKTOP — SIDEBAR
+   Modern Frosted Studio Navigation Dock
+   ========================================================== */
 
-/*  SIDEBAR ===== */
-.sidebar {
-    position: fixed;
-    left: -220px;
-    top: 0;
-    width: 220px;
-    height: 100vh;
-    background: rgba(0,0,0,0.85); /* glass feel */
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    transition: left 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: 999;
-    border-right: 1px solid #222;
-    will-change: left;
-}
+@media (min-width: 769px) {
+    /* SIDEBAR TRIGGER ZONE */
+    #sidebarTrigger {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 14px;
+        height: 100vh;
+        z-index: var(--z-sidebar-trigger, 998);
+        pointer-events: auto;
+    }
 
-.sidebar.active {
-    left: 0;
-}
+    /* SIDEBAR PANEL */
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        background: rgba(11, 13, 20, 0.82);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        padding: 32px 22px 140px 22px;
+        transition: left 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s ease;
+        z-index: var(--z-sidebar, 999);
+        border-right: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.6);
+        will-change: left;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+        box-sizing: border-box;
+    }
 
-.sidebar h2 {
-    margin-bottom: 30px;
-}
+    .sidebar.active {
+        left: 0;
+        box-shadow: 20px 0 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(0, 245, 160, 0.05);
+    }
 
-.sidebar p {
-    cursor: pointer;
-    margin: 15px 0;
-    color: #aaa;
-}
+    /* BRAND LOGO & TAGLINE */
+    .sidebar h2 {
+        margin: 0 0 4px 0;
+        font-family: var(--font-display, 'Space Grotesk', sans-serif);
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #ffffff 40%, var(--accent-primary, #00f5a0) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-.sidebar p:hover {
-    color: white;
-}
+    .sidebar > p[style*="font-size:12px"] {
+        margin: 0 0 28px 0 !important;
+        font-size: 11px !important;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--text-tertiary, rgba(255, 255, 255, 0.4)) !important;
+        font-weight: 600;
+    }
 
-/* PLAYLIST */
-#playlistList div {
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #ccc;
-}
+    /* NAVIGATION ITEMS */
+    .sidebar p:not([style*="font-size:12px"]) {
+        margin: 6px 0;
+        padding: 10px 14px;
+        border-radius: var(--radius-md, 12px);
+        cursor: pointer;
+        color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.2s ease;
+        background: transparent;
+        border: 1px solid transparent;
+        user-select: none;
+    }
 
-#playlistList div:hover {
-    background: rgba(255,255,255,0.08);
-    color: white;
+    .sidebar p:not([style*="font-size:12px"]):hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.08);
+        transform: translateX(4px);
+    }
+
+    .sidebar p:not([style*="font-size:12px"]):active {
+        transform: translateX(2px) scale(0.98);
+        background: rgba(0, 245, 160, 0.1);
+        border-color: rgba(0, 245, 160, 0.25);
+    }
+
+    /* PLAYLIST SECTION */
+    .sidebar h3 {
+        margin: 28px 0 14px 0;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text-tertiary, rgba(255, 255, 255, 0.4));
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .sidebar button {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: var(--radius-md, 12px);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        color: var(--text-secondary, rgba(255, 255, 255, 0.8));
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.22s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .sidebar button:hover {
+        background: rgba(0, 245, 160, 0.08);
+        border-color: var(--accent-primary, #00f5a0);
+        color: var(--accent-primary, #00f5a0);
+        box-shadow: 0 0 16px rgba(0, 245, 160, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .sidebar button:active {
+        transform: scale(0.98);
+    }
+
+    /* PLAYLIST LIST */
+    #playlistList {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    #playlistList div {
+        padding: 9px 12px;
+        border-radius: var(--radius-sm, 8px);
+        cursor: pointer;
+        color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.18s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-left: 2px solid transparent;
+    }
+
+    #playlistList div:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        border-left-color: var(--accent-primary, #00f5a0);
+        padding-left: 15px;
+    }
 }

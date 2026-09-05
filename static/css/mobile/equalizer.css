@@ -1,0 +1,433 @@
+@media (max-width: 768px) {
+    .equalizer-screen{
+
+        position: fixed;
+
+        inset: 0;
+
+        display: flex;
+
+        flex-direction: column;
+
+        width: 100%;
+
+        height: 100%;
+
+        background:
+            linear-gradient(
+                180deg,
+                #0b0b0b,
+                #000
+            );
+
+        z-index: 10005;
+
+        color: white;
+
+    }
+    .eq-header{
+
+        height:88px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:space-between;
+
+        padding:0 24px;
+
+    }
+
+    .eq-title-group{
+
+        text-align:center;
+
+        flex:1;
+
+    }
+
+    .eq-title-group h1{
+
+        font-size:28px;
+
+        font-weight:700;
+
+        letter-spacing:.5px;
+
+    }
+
+    .eq-title-group p{
+
+        margin-top:4px;
+
+        font-size:13px;
+
+        opacity:.45;
+
+    }
+
+    .eq-toggle {
+
+        position: relative;
+
+        width: 64px;
+
+        height: 28px;
+
+        background: rgba(255, 255, 255, 0.1);
+
+        border-radius: 999px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 2px;
+
+        cursor: pointer;
+
+        user-select: none;
+
+    }
+
+    .eq-toggle-option {
+
+        position: relative;
+
+        z-index: 2;
+
+        flex: 1;
+
+        text-align: center;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        letter-spacing: 0.5px;
+
+        color: rgba(255, 255, 255, 0.5);
+
+        transition: color 0.3s ease;
+
+    }
+
+    .eq-toggle:not(.off) .eq-toggle-on {
+
+        color: #000;
+
+    }
+
+    .eq-toggle.off .eq-toggle-off {
+
+        color: #fff;
+
+    }
+
+    .eq-toggle-thumb {
+
+        position: absolute;
+
+        top: 2px;
+
+        left: 2px;
+
+        width: 30px;
+
+        height: 24px;
+
+        border-radius: 999px;
+
+        background: #1DB954;
+
+        box-shadow:
+
+            0 0 10px #1DB954,
+
+            0 0 20px #1DB954;
+
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, box-shadow 0.3s ease;
+
+        z-index: 1;
+
+    }
+
+    .eq-toggle.off .eq-toggle-thumb {
+
+        transform: translateX(30px);
+
+        background: rgba(255, 255, 255, 0.2);
+
+        box-shadow: none;
+
+    }
+
+    .eq-visualizer{
+
+        height:180px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        overflow:hidden;
+
+    }
+
+    #eqVisualizer{
+
+        width:92%;
+
+        height:140px;
+
+        border-radius:18px;
+
+    }
+
+    .eq-controls{
+
+        display:flex;
+
+        justify-content:space-evenly;
+
+        align-items:center;
+
+        margin-top:20px;
+
+    }
+
+    .eq-knob{
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        gap:14px;
+
+        transition:.25s;
+
+        touch-action: none;
+
+        user-select: none;
+
+        cursor: ew-resize;
+
+    }
+
+    .eq-knob-value{
+
+        font-size:18px;
+
+        font-weight:700;
+
+    }
+
+    .eq-knob-wheel{
+
+        width:110px;
+
+        height:110px;
+
+        border-radius:50%;
+
+        background:
+
+            radial-gradient(
+
+                circle,
+
+                #2d2d2d,
+
+                #111
+
+            );
+
+        position:relative;
+
+        touch-action:none;
+        cursor:grab;
+
+    }
+
+    .eq-knob-indicator{
+
+        position:absolute;
+
+        top:10px;
+
+        left:50%;
+
+        transform:translateX(-50%);
+
+        width:4px;
+
+        height:20px;
+
+        border-radius:2px;
+
+        background:white;
+
+    }
+
+    .eq-knob.active{
+
+        transform:scale(1.05);
+
+    }
+
+    .eq-knob-label{
+
+        font-size:13px;
+
+        letter-spacing:1.5px;
+
+        text-transform:uppercase;
+
+        opacity:.75;
+
+    }
+
+    .eq-reset-btn{
+
+        border:none;
+
+        background:transparent;
+
+        color:white;
+
+        font-size:15px;
+
+        cursor:pointer;
+
+        opacity:.8;
+
+        transition:.25s;
+
+    }
+
+    .eq-reset-btn:hover{
+
+        opacity:1;
+
+    }
+
+
+    .eq-presets{
+
+        display:flex;
+
+        gap:14px;
+
+        overflow-x:auto;
+
+        padding:28px 20px;
+
+        scrollbar-width:none;
+
+    }
+
+    .eq-presets::-webkit-scrollbar{
+
+        display:none;
+
+    }
+
+    .preset-chip{
+
+        flex:0 0 auto;
+
+        border:none;
+
+        border-radius:999px;
+
+        padding:12px 22px;
+
+        background:rgba(255,255,255,.07);
+
+        color:white;
+
+        font-size:14px;
+
+        cursor:pointer;
+
+        transition:.25s;
+
+    }
+
+    .preset-chip:hover{
+
+        background:rgba(255,255,255,.12);
+
+    }
+
+    .preset-chip.active{
+
+        background:white;
+
+        color:black;
+
+        font-weight:600;
+
+    }
+
+    .preset-chip:disabled {
+
+        cursor: default;
+
+        pointer-events: none;
+
+        opacity: 0.4;
+
+    }
+
+    .preset-chip.active:disabled {
+
+        opacity: 1;
+
+    }
+
+    .eq-footer{
+
+        flex:0 0 80px;
+
+    }
+
+    .eq-back-btn{
+
+        width:48px;
+
+        height:48px;
+
+        border:none;
+
+        border-radius:50%;
+
+        background:rgba(255,255,255,.06);
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        cursor:pointer;
+
+        transition:.25s;
+
+    }
+
+    .eq-back-btn:hover{
+
+        transform:scale(1.05);
+
+        background:rgba(255,255,255,.10);
+
+    }
+}
