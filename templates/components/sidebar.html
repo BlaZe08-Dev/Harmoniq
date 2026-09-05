@@ -1,31 +1,12 @@
 <!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar" aria-label="Main Navigation">
-    <div class="sidebar-brand">
-        <div class="sidebar-logo">
-            <span class="logo-icon">🎧</span>
-            <span class="logo-text">Harmoniq</span>
-        </div>
-        <p class="sidebar-tagline">Cinematic Sound Studio</p>
+    <div class="sidebar" id="sidebar">
+        <h2>🎵 Harmoniq</h2>
+        <p style="color:#888; font-size:12px;">Just feel the music</p>
+
+        <p onclick="showHome()">🏠 Home</p>
+        <p onclick="showQueue()">📜 Queue</p>
+
+        <h3>📂 Playlists</h3>
+        <button onclick="createPlaylist()">+ New Playlist</button>
+        <div id="playlistList"></div>
     </div>
-
-    <nav class="sidebar-nav">
-        <button type="button" class="sidebar-link active-nav" onclick="showHome()">
-            <span class="sidebar-link-icon">🏠</span>
-            <span class="sidebar-link-text">Home</span>
-        </button>
-        <button type="button" class="sidebar-link" onclick="showQueue()">
-            <span class="sidebar-link-icon">📜</span>
-            <span class="sidebar-link-text">Queue</span>
-        </button>
-    </nav>
-
-    <div class="sidebar-divider"></div>
-
-    <div class="sidebar-playlists">
-        <div class="sidebar-section-header">
-            <span class="section-title">📂 Playlists</span>
-            <button type="button" class="new-playlist-btn" onclick="createPlaylist()">+ New</button>
-        </div>
-        <div id="playlistList" class="playlist-items"></div>
-    </div>
-</aside>
